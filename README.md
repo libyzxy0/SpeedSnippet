@@ -3,7 +3,7 @@
 **SpeedSnippet** is a platform where you can share your code snippets to help pther developers.
 
 > [!IMPORTANT]  
-> This project is still under development and hasn't enter beta stage yet. Everything is still subject to change. This is yet another school project.
+> This project is still under development and hasn't enter beta stage yet. Everything is still subject to change. This is a personal project.
 
 Like this project? **Leave a star**! ⭐⭐⭐⭐⭐
 
