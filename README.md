@@ -15,7 +15,7 @@ Run the following commands
 
 ## 🚀 Running
 
-To run this project open two terminals and run
+To run this project open your terminal and run
 
 -   `yarn run dev`
 
