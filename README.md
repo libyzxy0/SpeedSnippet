@@ -21,4 +21,4 @@ To run this project open two terminals and run
 
 ## 🛠️ Project Activity
 
-![Alt]( "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/3d19be24c0d5efeba949257cf2e915a12ab8c00f.svg "Repobeats analytics image")
