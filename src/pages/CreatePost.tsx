@@ -66,11 +66,11 @@ export default function CreatePost() {
     setTimeout(() => {
       navigate("/");
     }, 3000);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
       toast({
       title: "Error occurred!",
-      description: err ? err : "Something went wrong",
+      description: "Something went wrong",
     });
     }
   }
