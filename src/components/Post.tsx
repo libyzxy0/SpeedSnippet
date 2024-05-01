@@ -29,7 +29,7 @@ type CodeSnippetProps = {
 
 type ReactionType = {
   username: string;
-  reaction: "awesome" | "trash";
+  reaction: string;
 };
 
 type ReactionFilterType = {

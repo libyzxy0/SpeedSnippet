@@ -1,6 +1,5 @@
 import Navbar from "@/components/NavBar";
 import Post from "@/components/Post";
-import { useState, useEffect } from "react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
@@ -13,7 +12,7 @@ interface User {
 
 interface Reaction {
   username: string;
-  reaction: "awesome" | "trash";
+  reaction: string;
 }
 
 interface PostData {
