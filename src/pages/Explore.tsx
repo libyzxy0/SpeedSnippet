@@ -33,8 +33,8 @@ export default function Explore() {
           <Navbar.NavbarSearch />
           <Navbar.Actions />
         </Navbar>
-
-        <div className="w-full md:w-[70%]">
+        <div className="md:flex md:justify-center">
+        <div className="w-full md:w-[60%] md:shadow-lg">
           {!loading ? (
             posts.map((post, index) => (
               <Post key={index}>
@@ -60,6 +60,7 @@ export default function Explore() {
               <SkeletonLoading />
             </>
           )}
+        </div>
         </div>
       </div>
     </>

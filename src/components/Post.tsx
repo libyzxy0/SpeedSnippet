@@ -88,10 +88,12 @@ function Header({ username, avatar }: { username: string; avatar: string }) {
 
 function Caption({ title, description }: CaptionProps) {
   return (
-    <div className="border-t border-gray-300 dark:border-gray-800">
-      <h1 className="text-xl mx-4 mt-4 font-bold text-gray-700 dark:text-white">
+    <div className="border-t border-gray-300 dark:border-gray-800 flex flex-col">
+      <div className="flex flex-row items-center mt-4">
+        <h1 className="text-xl mx-4 font-bold text-gray-700 dark:text-white">
         {title}
-      </h1>
+        </h1>
+      </div>
       <p className="text-gray-700 dark:text-gray-100 mx-4 mt-2">
         {description}
       </p>
@@ -101,16 +103,31 @@ function Caption({ title, description }: CaptionProps) {
 
 function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
   const { theme } = useTheme();
-
+  const [copied, setCopied] = useState(false);
   const { total, most, isAwesome } = reactionsFilter(reactions);
-
+  
+  
+  const handleCopy = async () => {
+    if(!copied) {
+      try {
+        await navigator.clipboard.writeText(code);
+        setCopied(true);
+        setTimeout(() => {
+          setCopied(false);
+        }, 3000);
+      } catch (err) {
+        console.error('Error copying text to clipboard: ', err);
+      }
+    }
+  };
+  
   const rtext = total == 0 ? "" : `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
   return (
     <div className="px-4 pt-4 flex flex-col">
       <div className="bg-gray-200 dark:bg-gray-700 h-8 rounded-tl-lg rounded-tr-lg flex items-center flex-row justify-between">
         <p className="dark:text-gray-400 text-sm mx-3">{lang}</p>
-        <button className="outline-none border-none mx-3 text-xl dark:text-gray-400">
-          <Icon icon="mynaui:copy" />
+        <button onClick={handleCopy} className={`outline-none border-none mx-3 text-xl ${copied ? "text-sky-400" : "dark:text-gray-400"}`}>
+          <Icon icon={copied ? "iconamoon:check-fill" : "mynaui:copy"} />
         </button>
       </div>
       <SyntaxHighlighter

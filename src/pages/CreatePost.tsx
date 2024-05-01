@@ -31,6 +31,7 @@ export default function CreatePost() {
       navigate("/login");
     }
   });
+  const [uploading, setUploading] = useState(false);
 
   const [code, setCode] = useState(`function add(a, b) {\n  return a + b;\n}`);
   const [lang, setLang] = useState("js");
@@ -41,6 +42,7 @@ export default function CreatePost() {
   
   const handlePost = async (): Promise<void> => {
     try {
+      setUploading(true);
     const data = {
       id: Math.floor(Math.random() * 100000000), 
       user_id: user.id,
@@ -59,6 +61,7 @@ export default function CreatePost() {
       title: error ? "Error" : "Success",
       description: error ? "Failed to post snippet" : "Snippet is posted! Redirecting you to feed in 3 seconds.",
     });
+    setUploading(false);
     setTitle("");
     setCode("");
     setLang("");
@@ -67,6 +70,7 @@ export default function CreatePost() {
       navigate("/");
     }, 3000);
     } catch (err: any) {
+      setUploading(false);
       console.log(err);
       toast({
       title: "Error occurred!",
@@ -80,7 +84,9 @@ export default function CreatePost() {
     <div className="h-full w-full bg-white dark:bg-gray-950 pb-10">
       <Header back="/" />
 
-      <div className="pt-14 mx-5">
+      <div className="w-full pt-14 mx-5 flex flex-col md:flex-row md:justify-between">
+      <div className="w-[50%] mx-10">
+      
         <div>
           <label className="text-gray-700 dark:text-white text-md font-medium">
             Select Language
@@ -122,8 +128,11 @@ export default function CreatePost() {
             data-color-mode={theme == "dark" ? "dark" : "light"}
           />
         </div>
+        
+        </div>
+        <div className="w-[50%] mx-10">
 
-        <div className="mt-10">
+        <div className="mt-10 md:mt-0">
           <label className="text-gray-700 dark:text-white text-md font-medium">
             Enter Snippet title
           </label>
@@ -147,6 +156,7 @@ export default function CreatePost() {
         </div>
         <Button onClick={handlePost} className="py-5 w-full mt-6">Upload Snippet</Button>
       </div>
+    </div>
     </div>
     <Toaster />
     </>
