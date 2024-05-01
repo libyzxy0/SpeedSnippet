@@ -2,17 +2,20 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/helper/supabase-client.ts";
 
 const table: any = "post";
-
+/*
 interface User {
   username: string;
   avatar: string;
 }
+*/
+/*
 
 interface Reaction {
   username: string;
   reaction: string;
 }
-
+*/
+/*
 interface Post {
   id: string;
   title: string;
@@ -23,6 +26,7 @@ interface Post {
   user_id: string;
   reactions: Reaction[];
 }
+*/
 
 const usePost = () => {
   const [data, setData] = useState<any[]>([]);

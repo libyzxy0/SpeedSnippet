@@ -17,15 +17,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data, session, error } = await supabase.auth.getUser<any>();
-        if (error) {
+        const { data, session, error }: any = await supabase.auth.getUser();
+        if (error || !data) {
           setState(initialUser);
           return;
         }
         if (data) {
-          setState({ session, user: data, logout });
+          setState({ session, user: data.user, logout });
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching user data:", error);
       }
     };
@@ -34,11 +34,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const onChange = (_event: string, session: Session | null) => {
+    const onChange = (_event: string, session: any | null) => {
       setState(prevState => ({ ...prevState, session, user: session ? session.user : null }));
     };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(onChange); 
+    const { data: { subscription } }: any = supabase.auth.onAuthStateChange(onChange); 
 
     return () => {
       subscription?.unsubscribe();
@@ -47,12 +47,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      let { error } = await supabase.auth.signOut();
+      const { error }: any = await supabase.auth.signOut();
       if (error) {
         throw error;
       }
       setState(initialUser);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error logging out:", error);
     }
   };
