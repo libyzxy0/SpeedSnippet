@@ -43,37 +43,38 @@ const usePost = () => {
   };
 
   const createPost = async (newRecord: Post) => {
-    try {
-      setLoading(true);
-      const { data: postData, error } = await supabase.from(table).insert<Post>([newRecord]);
-      if (error) throw error;
-      setData((prevData) => [...prevData, postData]);
-      setLoading(false);
-    } catch (error: any) {
-      setError(error.message);
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    const { data: postData, error: createError } = await supabase.from<Post>(table).insert([newRecord]);
+    if (createError) throw createError;
+    setData((prevData) => [...prevData, ...postData]);
+  } catch (createError: any) {
+    setError(createError.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const updatePost = async (id: string, updatedFields: Partial<Post>) => { 
-    try {
-      setLoading(true);
-      const { data: updatedData, error } = await supabase
-        .from(table)
-        .update(updatedFields)
-        .eq("id", id);
-      if (error) throw error;
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.id === id ? { ...item, ...updatedData } : item
-        )
-      );
-      setLoading(false);
-    } catch (error: any) {
-      setError(error.message);
-      setLoading(false);
-    }
-  };
+const updatePost = async (id: string, updatedFields: Partial<Post>) => {
+  try {
+    setLoading(true);
+    const { data: updatedData, error: updateError } = await supabase
+      .from<Post>(table)
+      .update(updatedFields)
+      .eq("id", id);
+    if (updateError) throw updateError;
+    setData((prevData) =>
+      prevData.map((item) =>
+        item.id === id ? { ...item, ...updatedData[0] } : item
+      )
+    );
+  } catch (updateError: any) {
+    setError(updateError.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const deletePost = async (id: string) => { 
     try {

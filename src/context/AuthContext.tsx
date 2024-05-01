@@ -1,15 +1,13 @@
 import { supabase } from "@/lib/helper/supabase-client.ts";
 import React, { useState, createContext, useEffect } from "react";
 
-import { Session, User } from '@supabase/supabase-js';
+import { Session, User, UserResponse } from '@supabase/supabase-js'; // Import UserResponse
 
 interface UserData {
   session: Session | null;
   user: User | null;
   logout: () => void;
 }
-
-
 
 const initialUser: UserData = { session: null, user: null, logout: () => {} };
 
@@ -21,13 +19,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data, session, error } = await supabase.auth.getUser();
+        const { data, session, error } = await supabase.auth.getUser<UserResponse>(); // Specify UserResponse type
         if (error) {
           setState(initialUser);
           return;
         }
-        if (data && session) {
-          setState({ session, user: data.user, logout });
+        if (data) {
+          setState({ session, user: data, logout }); // Use data directly for user
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -42,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setState(prevState => ({ ...prevState, session, user: session ? session.user : null }));
     };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(onChange);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(onChange); 
 
     return () => {
       subscription?.unsubscribe();

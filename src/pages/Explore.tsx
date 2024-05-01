@@ -49,7 +49,7 @@ export default function Explore() {
           ) : (
             <Navbar.LoginButton />
           )}
-          <Navbar.NavbarSearch search={"Hello"} />
+          <Navbar.NavbarSearch />
           <Navbar.Actions onClick={handlePost} />
         </Navbar>
 
