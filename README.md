@@ -11,13 +11,13 @@ Like this project? **Leave a star**! ⭐⭐⭐⭐⭐
 
 Run the following commands
 
--   `yarn install`
+- `yarn install`
 
 ## 🚀 Running
 
 To run this project open your terminal and run
 
--   `yarn run dev`
+- `yarn run dev`
 
 ## 🛠️ Project Activity
 
