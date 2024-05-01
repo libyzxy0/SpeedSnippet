@@ -154,7 +154,7 @@ export default function CreatePost() {
             rows={6}
           />
         </div>
-        <Button onClick={handlePost} className="py-5 w-full mt-6">Upload Snippet</Button>
+        <Button onClick={handlePost} className="py-5 w-full mt-6">{ uploading ? "Uploading" : "Upload Snippet"}</Button>
       </div>
     </div>
     </div>
