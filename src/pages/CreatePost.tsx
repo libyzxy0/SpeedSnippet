@@ -85,7 +85,7 @@ export default function CreatePost() {
       <Header back="/" />
 
       <div className="w-full pt-14 mx-5 flex flex-col md:flex-row md:justify-between">
-      <div className="md:w-[50%] md:mx-10">
+      <div className="w-full flex justify-center md:w-[50%] md:mx-10">
       
         <div>
           <label className="text-gray-700 dark:text-white text-md font-medium">
@@ -130,7 +130,7 @@ export default function CreatePost() {
         </div>
         
         </div>
-        <div className="md:w-[50%] md:mx-10">
+        <div className="3000w-full flex justify-center md:w-[50%] md:mx-10">
 
         <div className="mt-10 md:mt-0">
           <label className="text-gray-700 dark:text-white text-md font-medium">
