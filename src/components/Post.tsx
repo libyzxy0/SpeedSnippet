@@ -128,27 +128,28 @@ function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
 }
 
 function Reaction({ id, user_id }: { id: number, user_id: string }) {
-  const { data, updatePost, error } = usePost();
+  const { data, updatePost } = usePost();
   const [cReaction, setcReaction] = useState("");
 
   useEffect(() => {
     const post = data.find(p => p.id === id);
     if (post) {
-      const userReaction = post.reactions.find(u => u.username === user_id);
+      const userReaction = post.reactions.find((u: { username: string, reaction: string }) => u.username === user_id);
+
       if (userReaction) {
         setcReaction(userReaction.reaction);
       }
     }
   }, [data, id, user_id]);
 
-  const handleReaction = async (postID, reaction): Promise<void> => {
+  const handleReaction = async (postID: number, reaction: string): Promise<void> => {
     setcReaction(reaction);
     if (!data) return;
     
     const post = data.find(p => p.id === postID);
     if (!post) return;
     
-    const existingReactionIndex = post.reactions.findIndex(u => u.username === user_id);
+    const existingReactionIndex = post.reactions.findIndex((u: { username: string, reaction: string }) => u.username === user_id);
 
     if (existingReactionIndex === -1) {
       const fields = {

@@ -7,7 +7,7 @@ export default function Header({
   back,
   className,
 }: {
-  back?: string;
+  back: string;
   className?: string;
 }) {
   return (
