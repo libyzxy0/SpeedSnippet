@@ -3,7 +3,6 @@ import { supabase } from "@/lib/helper/supabase-client.ts";
 
 const table = "post";
 
-
 interface User {
   username: string;
   avatar: string;
@@ -24,7 +23,6 @@ interface Post {
   reactions: Reaction[];
 }
 
-
 const usePost = () => {
   const [data, setData] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -33,9 +31,9 @@ const usePost = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.from(table).select<Post>("*");
+      const { data: postData, error } = await supabase.from(table).select<Post>("*");
       if (error) throw error;
-      setData(data || []);
+      setData(postData || []);
       setLoading(false);
     } catch (error) {
       setError(error.message);
@@ -46,9 +44,9 @@ const usePost = () => {
   const createPost = async (newRecord: Post) => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.from(table).insert<Post>([newRecord]);
+      const { data: postData, error } = await supabase.from(table).insert<Post>([newRecord]);
       if (error) throw error;
-      setData((prevData) => [...prevData, newRecord]);
+      setData((prevData) => [...prevData, postData]);
       setLoading(false);
     } catch (error) {
       setError(error.message);
@@ -59,14 +57,14 @@ const usePost = () => {
   const updatePost = async (id: string, updatedFields: Partial<Post>) => { 
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data: updatedData, error } = await supabase
         .from(table)
         .update(updatedFields)
         .eq("id", id);
       if (error) throw error;
       setData((prevData) =>
         prevData.map((item) =>
-          item.id === id ? { ...item, ...updatedFields } : item
+          item.id === id ? { ...item, ...updatedData } : item
         )
       );
       setLoading(false);
