@@ -5,29 +5,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
 import SkeletonLoading from '@/components/skeleton-loading';
 
-interface User {
-  username: string;
-  avatar: string;
-}
-
-interface Reaction {
-  username: string;
-  reaction: string;
-}
-
-interface PostData {
-  id: string;
-  title: string;
-  description: string;
-  lang: string;
-  code: string;
-  user: User;
-  reactions: Reaction[];
-}
-
 export default function Explore() {
   const { user } = useAuth();
-  const { data: posts, loading } = usePost<PostData>(); 
+  const { data: posts, loading } = usePost(); 
 
   const handlePost = async () => {
     // Function to create post

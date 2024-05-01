@@ -1,9 +1,8 @@
 import { supabase } from "@/lib/helper/supabase-client.ts";
 import React, { useState, createContext, useEffect } from "react";
-import { Session } from '@supabase/supabase-js'
 
 interface UserData {
-  session: Session;
+  session: any;
   user: any;
   logout: () => void;
 }
@@ -18,7 +17,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const { data, session, error } = await supabase.auth.getUser<Session>();
+        const { data, session, error } = await supabase.auth.getUser<any>();
         if (error) {
           setState(initialUser);
           return;
