@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -42,15 +41,12 @@ export default function Login() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    const { user, session, error } = await supabase.auth.signInWithPassword(
+  async function onSubmit(user: z.infer<typeof formSchema>) {
+    const { error } = await supabase.auth.signInWithPassword(
       {
-        email: data.username,
-        password: data.password,
-      },
-      {
-        redirectTo: "/",
-      },
+        email: user.username,
+        password: user.password,
+      }
     );
 
     if (data && !error) {
@@ -142,7 +138,6 @@ export default function Login() {
           <div className="flex flex-col">
             <Button
               onClick={loginWithGoogle}
-              variant=""
               className="w-full py-5 mt-3 bg-white shadow text-gray-700 hover:bg-gray-50"
               type="submit"
             >
@@ -151,7 +146,6 @@ export default function Login() {
             </Button>
             <Button
               onClick={loginWithGithub}
-              variant=""
               className="w-full py-5 mt-3 bg-gray-800 shadow text-white hover:bg-gray-900"
               type="submit"
             >

@@ -4,6 +4,7 @@ import React, { useState, createContext, useEffect } from "react";
 interface UserData {
   session: unknown | null;
   user: unknown | null;
+  logout: () => void;
 }
 
 const initialUser: UserData = { session: null, user: null };
@@ -33,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const onChange = (event: string, session: unknown | null) => {
+    const onChange = (_event: string, session: unknown | null) => {
       //console.log(event, session)
       setState({ session, user: session ? (session as any).user : null });
     };

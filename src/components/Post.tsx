@@ -7,9 +7,7 @@ import {
   atomOneLight,
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { useTheme } from "@/components/theme-provider";
-
 import { Button } from "@/components/ui/button";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type PostProps = {
@@ -18,14 +16,11 @@ type PostProps = {
   id: string;
 };
 
-type HeaderProps = {
-  username: string;
-  avatar: string;
-};
 type CaptionProps = {
   title: string;
   description: string;
 };
+
 type CodeSnippetProps = {
   code: string;
   lang: string;
@@ -40,27 +35,19 @@ type ReactionType = {
 type ReactionFilterType = {
   most: number;
   total: number;
-  isAwsome: boolean;
+  isAwesome: boolean;
 };
 
-function reactionsFilter(reactions: ReactionType): ReactionFilterType {
+function reactionsFilter(reactions: ReactionType[]): ReactionFilterType {
   const isAwesome =
-    reactions.map((item) => item.reaction).filter((item) => item === "awesome")
-      .length >
-    reactions.map((item) => item.reaction).filter((item) => item === "trash")
-      .length
-      ? true
-      : false;
+    reactions.filter((item) => item.reaction === "awesome").length >
+    reactions.filter((item) => item.reaction === "trash").length;
 
   let most = 0;
   if (isAwesome) {
-    most = reactions
-      .map((item) => item.reaction)
-      .filter((item) => item === "awesome").length;
+    most = reactions.filter((item) => item.reaction === "awesome").length;
   } else {
-    most = reactions
-      .map((item) => item.reaction)
-      .filter((item) => item === "trash").length;
+    most = reactions.filter((item) => item.reaction === "trash").length;
   }
 
   return {
@@ -78,13 +65,13 @@ function Post({ children, className, id }: PostProps) {
   );
 }
 
-function Header({ username, avatar }) {
+function Header({ username, avatar }: { username: string; avatar: string }) {
   return (
     <div className="bg-white dark:bg-gray-950 w-full py-2 flex flex-row items-center justify-between">
       <div className="flex items-center">
         <Avatar className="ml-4 border-2 border-gray-300 dark:border-gray-800">
           <AvatarImage src={avatar} alt={"D"} />
-          <AvatarFallback>{username.split("")[0].toUpperCase()}</AvatarFallback>
+          <AvatarFallback>{username.slice(0, 1).toUpperCase()}</AvatarFallback>
         </Avatar>
         <h1 className="font-medium text-lg mx-2 text-gray-700 dark:text-gray-50">
           {"@" + username}
@@ -115,8 +102,7 @@ function Caption({ title, description }: CaptionProps) {
 function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
   const { theme } = useTheme();
 
-  const { _total, most, isAwesome } =
-    reactionsFilter<ReactionFilterType>(reactions);
+  const { most, isAwesome } = reactionsFilter(reactions);
 
   const rtext = `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
   return (
@@ -128,9 +114,9 @@ function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
         </button>
       </div>
       <SyntaxHighlighter
-        className={`text-sm rounded-bl-lg rounded-br-lg ${theme == "dark" ? "codebg-black" : "codebg-white"}`}
+        className={`text-sm rounded-bl-lg rounded-br-lg ${theme === "dark" ? "codebg-black" : "codebg-white"}`}
         language={lang}
-        style={theme == "dark" ? atomOneDark : atomOneLight}
+        style={theme === "dark" ? atomOneDark : atomOneLight}
       >
         {code}
       </SyntaxHighlighter>

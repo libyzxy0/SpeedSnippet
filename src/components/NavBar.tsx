@@ -13,12 +13,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -30,8 +26,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 
 import { Plus } from "lucide-react";
@@ -74,7 +69,6 @@ function LoginButton() {
 }
 
 function NavbarAvatar({
-  className,
   src,
   fallback,
   alt,
@@ -134,7 +128,6 @@ function NavbarAvatar({
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
-              variant="destructive"
               onClick={() => {
                 logout();
                 setTimeout(() => setOpen(false), 2000);

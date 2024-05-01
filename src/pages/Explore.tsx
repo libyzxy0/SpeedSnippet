@@ -7,21 +7,22 @@ import { usePost } from "@/hooks/usePost";
 import SkeletonLoading from '@/components/skeleton-loading';
 
 export default function Explore() {
-  const { session, user } = useAuth();
+  const { user } = useAuth(); 
   const { data: posts, loading } = usePost();
 
   const handlePost = async () => {
-    //Function to create post
+    // Function to create post
   };
+
   return (
     <>
       <div className="h-full w-full bg-white dark:bg-gray-950">
         <Navbar>
           {user ? (
             <Navbar.NavbarAvatar
-              src={user.user_metadata?.avatar_url}
+              src={user.user_metadata?.avatar}
               alt={user.user_metadata?.full_name}
-              fallback={user.user_metadata?.full_name.split("")[0]}
+              fallback={user.user_metadata?.full_name?.charAt(0)}
               provider={user.app_metadata?.provider}
               name={user.user_metadata?.full_name}
             />
@@ -54,8 +55,8 @@ export default function Explore() {
             ))
           ) : (
             <>
-            <SkeletonLoading />
-            <SkeletonLoading />
+              <SkeletonLoading />
+              <SkeletonLoading />
             </>
           )}
         </div>
