@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Icon } from "@iconify/react";
 import { supabase } from "@/lib/helper/supabase-client.ts";
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
@@ -49,7 +48,7 @@ export default function Login() {
       }
     );
 
-    if (data && !error) {
+    if (user && !error) {
       toast({
         title: "Successfully logged in!",
         description: "Redirecting you in 3 seconds...",

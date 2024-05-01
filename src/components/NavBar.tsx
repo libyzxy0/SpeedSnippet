@@ -44,7 +44,7 @@ type NavbarAvatarProps = {
   name: string;
 };
 type NavbarSearchProps = {
-  search: string;
+  search?: string;
 };
 
 function Navbar({ children, className }: NavbarProps) {

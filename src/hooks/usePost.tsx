@@ -20,6 +20,7 @@ interface Post {
   lang: string;
   code: string;
   user: User;
+  user_id: string;
   reactions: Reaction[];
 }
 
@@ -35,7 +36,7 @@ const usePost = () => {
       if (error) throw error;
       setData(postData || []);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message);
       setLoading(false);
     }
@@ -48,7 +49,7 @@ const usePost = () => {
       if (error) throw error;
       setData((prevData) => [...prevData, postData]);
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message);
       setLoading(false);
     }
@@ -68,7 +69,7 @@ const usePost = () => {
         )
       );
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message);
       setLoading(false);
     }
@@ -81,7 +82,7 @@ const usePost = () => {
       if (error) throw error;
       setData((prevData) => prevData.filter((item) => item.id !== id));
       setLoading(false);
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message);
       setLoading(false);
     }

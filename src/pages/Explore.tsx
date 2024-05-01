@@ -6,9 +6,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
 import SkeletonLoading from '@/components/skeleton-loading';
 
-// Types
-import { User as SupabaseUser } from '@supabase/supabase-js';
-
 interface User {
   username: string;
   avatar: string;
@@ -16,7 +13,7 @@ interface User {
 
 interface Reaction {
   username: string;
-  reaction: string;
+  reaction: "awesome" | "trash";
 }
 
 interface PostData {
@@ -30,8 +27,8 @@ interface PostData {
 }
 
 export default function Explore() {
-  const { user } = useAuth<SupabaseUser>(); // Correctly use the declared type User
-  const { data: posts, loading } = usePost<PostData>(); // Correctly use the declared type PostData
+  const { user } = useAuth();
+  const { data: posts, loading } = usePost<PostData>(); 
 
   const handlePost = async () => {
     // Function to create post
@@ -52,7 +49,7 @@ export default function Explore() {
           ) : (
             <Navbar.LoginButton />
           )}
-          <Navbar.NavbarSearch />
+          <Navbar.NavbarSearch search={"Hello"} />
           <Navbar.Actions onClick={handlePost} />
         </Navbar>
 

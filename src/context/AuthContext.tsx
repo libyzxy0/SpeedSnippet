@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const onChange = (_event: string, session: supabase.auth.Session | null) => {
+    const onChange = (_event: string, session: Session | null) => {
       setState(prevState => ({ ...prevState, session, user: session ? session.user : null }));
     };
 
