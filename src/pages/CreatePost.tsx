@@ -70,7 +70,7 @@ export default function CreatePost() {
       console.log(err);
       toast({
       title: "Error occurred!",
-      description: err ? err.message : "Something went wrong",
+      description: err ? err : "Something went wrong",
     });
     }
   }
