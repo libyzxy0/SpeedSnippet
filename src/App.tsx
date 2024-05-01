@@ -10,7 +10,7 @@ import Signup from "@/pages/Signup";
 
 export default function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <AuthProvider>
         <Routes>
           <Route index element={<Explore />} />

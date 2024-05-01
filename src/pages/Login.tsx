@@ -80,7 +80,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="h-screen bg-white dark:bg-gray-950 w-full">
+      <div className="h-screen bg-white dark:bg-gray-950 w-full md:flex md:items-center md:flex-col">
         <header className="pt-14 mx-5">
           <h1 className="text-gray-700 dark:text-white font-bold text-3xl">
             Login | SpeedSnippet
@@ -89,7 +89,7 @@ export default function Login() {
             Connecting developers together 💙
           </p>
         </header>
-        <div className="mx-5 mt-16">
+        <div className="mx-5 mt-16 md:w-[50%]">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField

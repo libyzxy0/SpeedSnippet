@@ -93,7 +93,7 @@ export default function Signup() {
   }
   return (
     <>
-      <div className="h-full bg-white dark:bg-gray-950 w-full pb-20">
+      <div className="h-full bg-white dark:bg-gray-950 w-full pb-20 md:flex md:items-center md:flex-col">
         <header className="pt-24 mx-5">
           <h1 className="dark:text-white font-bold text-3xl text-gray-700">
             Signup | SpeedSnippet
@@ -102,7 +102,7 @@ export default function Signup() {
             Connecting developers together 💙
           </p>
         </header>
-        <div className="mx-5 mt-12">
+        <div className="mx-5 mt-12 md:w-[50%]">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField
