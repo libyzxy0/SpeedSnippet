@@ -8,6 +8,7 @@ import { supabase } from "@/lib/helper/supabase-client.ts";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Form,
@@ -30,6 +31,7 @@ const formSchema = z.object({
 
 export default function Login() {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -41,18 +43,18 @@ export default function Login() {
   });
 
   async function onSubmit(user: z.infer<typeof formSchema>) {
-    const { error } = await supabase.auth.signInWithPassword(
-      {
-        email: user.username,
-        password: user.password,
-      }
-    );
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: user.username,
+      password: user.password,
+    });
 
     if (user && !error) {
       toast({
         title: "Successfully logged in!",
         description: "Redirecting you in 3 seconds...",
       });
+      setLoading(false);
       setTimeout(() => {
         navigate("/");
       }, 3000);
@@ -61,6 +63,7 @@ export default function Login() {
         title: "Login Failed!",
         description: "Invalid credentials",
       });
+      setLoading(false);
     }
   }
 
@@ -126,7 +129,7 @@ export default function Login() {
                 )}
               />
               <Button className="w-full py-5 mt-4" type="submit">
-                Login
+                {loading ? "Loading..." : "Login"}
               </Button>
             </form>
           </Form>

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { supabase } from "@/lib/helper/supabase-client.ts";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +38,8 @@ const formSchema = z.object({
   }),
 });
 
-export default function Login() {
+export default function Signup() {
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -60,6 +62,7 @@ export default function Login() {
       });
       return;
     }
+    setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email: user.email,
       password: user.password,
@@ -76,6 +79,7 @@ export default function Login() {
         title: "Account created!",
         description: "Redirecting you in 3 seconds...",
       });
+      setLoading(false);
       setTimeout(() => {
         navigate("/login");
       }, 3000);
@@ -84,6 +88,7 @@ export default function Login() {
         title: "Something went wrong",
         description: "There's an error while creating your account.",
       });
+      setLoading(false);
     }
   }
   return (
@@ -191,7 +196,7 @@ export default function Login() {
                 )}
               />
               <Button className="w-full py-5 mt-4" type="submit">
-                Create Account
+                {loading ? "Loading..." : "Create Account"}
               </Button>
             </form>
           </Form>

@@ -4,10 +4,16 @@ import React, { useState, createContext, useEffect } from "react";
 interface UserData {
   session: any;
   user: any;
+  loading: boolean;
   logout: () => void;
 }
 
-const initialUser: UserData = { session: null, user: null, logout: () => {} };
+const initialUser: UserData = {
+  session: null,
+  user: null,
+  logout: () => {},
+  loading: true,
+};
 
 export const AuthContext = createContext<UserData>(initialUser);
 
@@ -15,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<UserData>(initialUser);
 
   useEffect(() => {
+    setState(initialUser);
     const fetchUserData = async () => {
       try {
         const { data, session, error }: any = await supabase.auth.getUser();
@@ -23,7 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           return;
         }
         if (data) {
-          setState({ session, user: data.user, logout });
+          setState({ session, user: data.user, logout, loading: false });
         }
       } catch (error: any) {
         console.error("Error fetching user data:", error);
@@ -35,10 +42,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const onChange = (_event: string, session: any | null) => {
-      setState(prevState => ({ ...prevState, session, user: session ? session.user : null }));
+      setState((prevState) => ({
+        ...prevState,
+        session,
+        user: session ? session.user : null,
+        loading: false,
+      }));
     };
 
-    const { data: { subscription } }: any = supabase.auth.onAuthStateChange(onChange); 
+    const {
+      data: { subscription },
+    }: any = supabase.auth.onAuthStateChange(onChange);
 
     return () => {
       subscription?.unsubscribe();
@@ -57,9 +71,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  return (
-    <AuthContext.Provider value={state}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
 }

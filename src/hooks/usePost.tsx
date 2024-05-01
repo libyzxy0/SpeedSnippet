@@ -36,7 +36,9 @@ const usePost = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const { data: postData, error }: any = await supabase.from(table).select<any>("*");
+      const { data: postData, error }: any = await supabase
+        .from(table)
+        .select<any>("*");
       if (error) throw error;
       setData(postData || []);
       setLoading(false);
@@ -49,48 +51,54 @@ const usePost = () => {
   const createPost = async (newRecord: any) => {
     try {
       setLoading(true);
-      const { data: postData, error: createError }: any = await supabase.from(table).insert([newRecord]);
+      const { error: createError }: any = await supabase
+        .from(table)
+        .insert([newRecord]);
+        
       if (createError) throw createError;
-      setData((prevData: any[]) => [...prevData, ...postData]);
+      
+      return true;
     } catch (createError: any) {
       setError(createError.message);
+      return false;
     } finally {
       setLoading(false);
     }
   };
-
-  const updatePost = async (id: string, updatedFields: Partial<any>) => {
+  const updatePost = async (id: number, updatedFields: Partial<any>) => {
     try {
       setLoading(true);
-      const { data: updatedData, error: updateError }: any = await supabase
+      const { error: updateError }: any = await supabase
         .from(table)
         .update(updatedFields)
         .eq("id", id);
       if (updateError) throw updateError;
-      setData((prevData: any[]) =>
-        prevData.map((item: any) =>
-          item.id === id ? { ...item, ...updatedData[0] } : item
-        )
-      );
+      setLoading(false);
+      return true;
     } catch (updateError: any) {
       setError(updateError.message);
-    } finally {
       setLoading(false);
+      return false;
     }
-  };
+};
 
-  const deletePost = async (id: string) => {
+
+const deletePost = async (id: string) => {
     try {
       setLoading(true);
       const { error }: any = await supabase.from(table).delete().eq("id", id);
       if (error) throw error;
-      setData((prevData: any[]) => prevData.filter((item: any) => item.id !== id));
       setLoading(false);
+      return true;
     } catch (error: any) {
       setError(error.message);
       setLoading(false);
+      return false;
     }
   };
+
+
+  
 
   useEffect(() => {
     fetchData();

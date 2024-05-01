@@ -44,6 +44,8 @@ export function ThemeProvider({
       root.classList.add(systemTheme);
       return;
     }
+    //Set the background color of the body
+    document.body.style.background = theme == "dark" ? "#030712" : "#ffffff";
 
     root.classList.add(theme);
   }, [theme]);

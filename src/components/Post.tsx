@@ -9,11 +9,11 @@ import {
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
+import { usePost } from '@/hooks/usePost';
+import { useState, useEffect } from 'react';
 type PostProps = {
   children: React.ReactNode;
   className?: string;
-  id: string;
 };
 
 type CaptionProps = {
@@ -57,9 +57,9 @@ function reactionsFilter(reactions: ReactionType[]): ReactionFilterType {
   };
 }
 
-function Post({ children, className, id }: PostProps) {
+function Post({ children, className }: PostProps) {
   return (
-    <div id={id} className={cn("w-full", className)}>
+    <div className={cn("w-full", className)}>
       {children}
     </div>
   );
@@ -102,9 +102,9 @@ function Caption({ title, description }: CaptionProps) {
 function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
   const { theme } = useTheme();
 
-  const { most, isAwesome } = reactionsFilter(reactions);
+  const { total, most, isAwesome } = reactionsFilter(reactions);
 
-  const rtext = `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
+  const rtext = total == 0 ? "" : `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
   return (
     <div className="px-4 pt-4 flex flex-col">
       <div className="bg-gray-200 dark:bg-gray-700 h-8 rounded-tl-lg rounded-tr-lg flex items-center flex-row justify-between">
@@ -127,18 +127,58 @@ function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
   );
 }
 
-function Reaction() {
+function Reaction({ id, user_id }: { id: number, user_id: string }) {
+  const { data, updatePost, error } = usePost();
+  const [cReaction, setcReaction] = useState("");
+
+  useEffect(() => {
+    const post = data.find(p => p.id === id);
+    if (post) {
+      const userReaction = post.reactions.find(u => u.username === user_id);
+      if (userReaction) {
+        setcReaction(userReaction.reaction);
+      }
+    }
+  }, [data, id, user_id]);
+
+  const handleReaction = async (postID, reaction): Promise<void> => {
+    setcReaction(reaction);
+    if (!data) return;
+    
+    const post = data.find(p => p.id === postID);
+    if (!post) return;
+    
+    const existingReactionIndex = post.reactions.findIndex(u => u.username === user_id);
+
+    if (existingReactionIndex === -1) {
+      const fields = {
+        reactions: [...post.reactions, { username: user_id, reaction: reaction }]
+      };
+      await updatePost(postID, fields);
+    } else {
+      // If User has already reacted, update existing reaction
+      const updatedReactions = [...post.reactions];
+      updatedReactions[existingReactionIndex].reaction = reaction;
+
+      const fields = {
+        reactions: updatedReactions
+      };
+      await updatePost(postID, fields);
+    }
+  }
+
   return (
     <div className="border-t border-t-gray-300 dark:border-t-gray-800 border-b-4 border-b-sky-300 dark:border-b-sky-300 flex flex-row mt-0">
-      <Button className="bg-white shadow-none rounded-none dark:bg-gray-950 text-gray-400 py-6 border-none w-[50%] transition-all duration-200 hover:bg-transparent hover:text-gray-900 dark:hover:text-white">
+      <Button onClick={() => handleReaction(id, "awesome")} className={`bg-white shadow-none rounded-none dark:bg-gray-950 py-6 border-none w-[50%] transition-all duration-200 hover:bg-transparent ${cReaction === "awesome" ? "text-sky-400" : "text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}>
         ⚡ Awesome
       </Button>
-      <Button className="bg-white shadow-none rounded-none dark:bg-gray-950 text-gray-400 py-6 border-none w-[50%] transition-all duration-200 hover:bg-transparent hover:text-gray-900 dark:hover:text-white">
+      <Button onClick={() => handleReaction(id, "trash")} className={`bg-white shadow-none rounded-none dark:bg-gray-950 py-6 border-none w-[50%] transition-all duration-200 hover:bg-transparent ${cReaction === "trash" ? "text-sky-400" : "text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}>
         💩 Trash
       </Button>
     </div>
   );
 }
+
 
 Post.Header = Header;
 Post.Caption = Caption;

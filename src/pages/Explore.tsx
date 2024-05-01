@@ -1,18 +1,12 @@
 import Navbar from "@/components/NavBar";
 import Post from "@/components/Post";
-
 import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
-import SkeletonLoading from '@/components/skeleton-loading';
-
+import SkeletonLoading from "@/components/skeleton-loading";
+import { getUsername } from "@/lib/helper/username-getter.ts";
 export default function Explore() {
   const { user } = useAuth();
-  const { data: posts, loading } = usePost(); 
-
-  const handlePost = async () => {
-    // Function to create post
-  };
-
+  const { data: posts, loading } = usePost();
   return (
     <>
       <div className="h-full w-full bg-white dark:bg-gray-950">
@@ -20,22 +14,30 @@ export default function Explore() {
           {user ? (
             <Navbar.NavbarAvatar
               src={user.user_metadata?.avatar}
-              alt={user.user_metadata?.full_name}
-              fallback={user.user_metadata?.full_name?.charAt(0)}
+              alt={
+                user.app_metadata?.provider == "email"
+                  ? user.user_metadata.display_name
+                  : user.user_metadata?.full_name
+              }
+              fallback={
+                user.app_metadata?.provider == "email"
+                  ? user.user_metadata.display_name?.charAt(0)
+                  : user.user_metadata?.full_name?.charAt(0)
+              }
               provider={user.app_metadata?.provider}
-              name={user.user_metadata?.full_name}
+              name={getUsername(user)}
             />
           ) : (
             <Navbar.LoginButton />
           )}
           <Navbar.NavbarSearch />
-          <Navbar.Actions onClick={handlePost} />
+          <Navbar.Actions />
         </Navbar>
 
-        <div>
+        <div className="w-full md:w-[70%]">
           {!loading ? (
             posts.map((post, index) => (
-              <Post id={post.id} key={index}>
+              <Post key={index}>
                 <Post.Header
                   username={post.user.username}
                   avatar={post.user.avatar}
@@ -49,7 +51,7 @@ export default function Explore() {
                   lang={post.lang}
                   code={post.code}
                 />
-                <Post.Reaction />
+                <Post.Reaction user_id={user?.id} id={post?.id} />
               </Post>
             ))
           ) : (

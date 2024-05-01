@@ -26,7 +26,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
 import { Plus } from "lucide-react";
@@ -100,8 +100,9 @@ function NavbarAvatar({
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="capitalize">
-            {"Signed in " + provider}
+          <DropdownMenuItem>
+            <p>{"Signed using"}</p>
+            <b className="ml-1 capitalize text-sky-300">{provider}</b>
           </DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuItem disabled>API</DropdownMenuItem>
@@ -155,20 +156,13 @@ function NavbarSearch({ search }: NavbarSearchProps) {
   );
 }
 
-type ActionsProps = {
-  onClick: () => void;
-};
-
-function Actions({ onClick }: ActionsProps) {
+function Actions() {
   return (
     <div className="mr-4 flex flex-row">
-      <Button
-        className="mr-2"
-        variant="outline"
-        size="icon"
-        onClick={() => onClick()}
-      >
-        <Plus className="text-gray-700 dark:text-white" />
+      <Button className="mr-2" variant="outline" size="icon" asChild>
+        <Link to="/create">
+          <Plus className="text-gray-700 dark:text-white" />
+        </Link>
       </Button>
       <ModeToggle />
     </div>

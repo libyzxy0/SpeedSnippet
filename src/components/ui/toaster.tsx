@@ -15,8 +15,8 @@ export function Toaster() {
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
-          <Toast className="bg-gray-950" key={id} {...props}>
-            <div className="bg-gray-950 grid gap-1">
+          <Toast className="bg-white dark:bg-gray-950" key={id} {...props}>
+            <div className="bg-white dark:bg-gray-950 grid gap-1">
               {title && <ToastTitle>{title}</ToastTitle>}
               {description && (
                 <ToastDescription>{description}</ToastDescription>
