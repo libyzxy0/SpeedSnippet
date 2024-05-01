@@ -70,7 +70,7 @@ export default function CreatePost() {
       console.log(err);
       toast({
       title: "Error occurred!",
-      description: err,
+      description: err ? err.message : "Something went wrong",
     });
     }
   }
@@ -78,7 +78,7 @@ export default function CreatePost() {
   return (
     <>
     <div className="h-full w-full bg-white dark:bg-gray-950 pb-10">
-      <Header back={"/"} />
+      <Header back="/" />
 
       <div className="pt-14 mx-5">
         <div>
