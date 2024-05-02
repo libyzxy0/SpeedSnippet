@@ -51,17 +51,21 @@ export default function ViewPost() {
 
   return (
     <>
-      <Header back="/" title={data.user.username + "'s post"} />
+      <Header back="/" title={data?.user.username + "'s post"} />
       <div className="md:flex md:justify-center">
         <div className="w-full md:w-[60%] md:shadow-lg">
           {!loading && data ? (
             <div>
-              <Post post={data}>
-                <Post.Header />
-                <Post.Caption />
-                <Post.CodeSnippet />
-                <Post.Reaction />
-              </Post>
+              {data ? (
+                <Post post={data}>
+                  <Post.Header />
+                  <Post.Caption />
+                  <Post.CodeSnippet />
+                  <Post.Reaction />
+               </Post>
+              ) : (
+                <h1 className="text-red-600 mt-20 text-xl">Post Not Found!</h1>
+              )}
             </div>
           ) : (
             <SkeletonLoading />
