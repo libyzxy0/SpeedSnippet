@@ -54,6 +54,8 @@ interface PostContextType {
   user: User;
   user_id: string;
   reactions: Reaction[];
+  rtext?: string;
+  handleChangeReaction: () => void;
 }
 
 interface PostProps {
@@ -102,8 +104,16 @@ function reactionsFilter(reactions: Reaction[]): ReactionFilterType {
 
 
 function Post({ children, className, post }: PostProps) {
+  const [rtext, setRText] = useState("");
+  
+  const handleChangeReaction = (reactions: ReactionType[]): void => {
+    const { total, most, isAwesome } = reactionsFilter(reactions);
+    const crtext = total == 0 ? "" : `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
+    setRText(crtext);
+  }
+  
   return (
-    <PostContext.Provider value={post}>
+    <PostContext.Provider value={{...post, rtext, handleChangeReaction}}>
     <>
       <div className={cn("w-full", className)}>
         {children}
@@ -233,8 +243,7 @@ function CodeSnippet() {
   const post = usePostContext();
   const { theme } = useTheme();
   const [copied, setCopied] = useState(false);
-  const { reactions, code, lang } = post;
-  const { total, most, isAwesome } = reactionsFilter(reactions);
+  const { rtext, code, lang } = post;
   
   
   const handleCopy = async () => {
@@ -250,8 +259,6 @@ function CodeSnippet() {
       }
     }
   };
-  
-  const rtext = total == 0 ? "" : `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
   return (
     
     <div className="px-4 pt-4 flex flex-col">
@@ -293,6 +300,7 @@ function Reaction() {
 
   useEffect(() => {
     const currentPost = data.find(p => p.id === id);
+    post.handleChangeReaction(post.reactions);
     if (currentPost) {
       const userReaction = currentPost.reactions.find((u: { username: string, reaction: string }) => u.username === user_id);
 
@@ -316,6 +324,7 @@ function Reaction() {
       const fields = {
         reactions: [...post.reactions, { username: user_id, reaction: reaction }]
       };
+      post.handleChangeReaction(fields.reactions)
       await updatePost<UpdateType>(postID, fields);
     } else {
       // If User has already reacted, update existing reaction
@@ -325,6 +334,7 @@ function Reaction() {
       const fields = {
         reactions: updatedReactions
       };
+      post.handleChangeReaction(fields.reactions)
       await updatePost<UpdateType>(postID, fields);
     }
   }
