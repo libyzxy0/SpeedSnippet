@@ -15,7 +15,7 @@ interface Reaction {
   reaction: string;
 }
 
-interface Post {
+interface PostData {
   id: number;
   title: string;
   description: string;
@@ -27,26 +27,28 @@ interface Post {
 }
 
 export default function ViewPost() {
-  const { postID } = useParams<{ postID: string }>();
+  const { postID } = useParams<{ postID?: string }>();
   const { getSinglePost } = usePost();
-  const [data, setData] = useState<Post | null>(null);
+  const [data, setData] = useState<PostData | null>(null); 
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const handleFetch = async () => {
-      setLoading(true);
-      try {
-        const postData = await getSinglePost(parseInt(postID));
-        setData(postData);
-      } catch (error) {
-        console.error('Error fetching post:', error);
-      } finally {
-        setLoading(false);
+      if (postID) {
+        setLoading(true);
+        try {
+          const postData = await getSinglePost(parseInt(postID));
+          setData(postData);
+        } catch (error) {
+          console.error('Error fetching post:', error);
+        } finally {
+          setLoading(false);
+        }
       }
     };
     handleFetch();
   }, [getSinglePost, postID]);
-  
+
   return (
     <>
       <Header back="/" title={data.user.username + "'s post"} />
