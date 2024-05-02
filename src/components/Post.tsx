@@ -92,10 +92,9 @@ function reactionsFilter(reactions: Reaction[]): ReactionFilterType {
 
 
 function Post({ children, className, post }: PostProps) {
-  const navigate = useNavigate();
   return (
     <PostContext.Provider value={post}>
-      <div onClick={() => navigate(`/post/${post.id}?from=explore`)} className={cn("w-full", className)}>
+      <div className={cn("w-full", className)}>
         {children}
       </div>
     </PostContext.Provider>
@@ -132,9 +131,10 @@ function Header() {
 
 function Caption() {
   const post = usePostContext();
+  const navigate = useNavigate();
   const { title, description } = post;
   return (
-    <div className="border-t border-gray-300 dark:border-gray-800 flex flex-col">
+    <div onClick={() => navigate(`/post/${post.id}?from=explore`)} className="border-t border-gray-300 dark:border-gray-800 flex flex-col">
       <div className="flex flex-row items-center mt-4">
         <h1 className="text-xl mx-4 font-bold text-gray-700 dark:text-white">
         {title}
@@ -149,6 +149,7 @@ function Caption() {
 
 function CodeSnippet() {
   const post = usePostContext();
+  const navigate = useNavigate();
   const { theme } = useTheme();
   const [copied, setCopied] = useState(false);
   const { reactions, code, lang } = post;
@@ -171,7 +172,8 @@ function CodeSnippet() {
   
   const rtext = total == 0 ? "" : `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
   return (
-    <div className="px-4 pt-4 flex flex-col">
+    
+    <div onClick={() => navigate(`/post/${post.id}?from=explore`)} className="px-4 pt-4 flex flex-col">
       <div className="bg-gray-200 dark:bg-gray-700 h-8 rounded-tl-lg rounded-tr-lg flex items-center flex-row justify-between">
         <p className="dark:text-gray-400 text-sm mx-3">{lang}</p>
         <button onClick={handleCopy} className={`outline-none border-none mx-3 text-xl ${copied ? "text-sky-400" : "dark:text-gray-400"}`}>
