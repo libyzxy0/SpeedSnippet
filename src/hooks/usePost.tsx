@@ -1,23 +1,20 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/helper/supabase-client.ts";
 
-const table: any = "post";
-/*
+const table: string = "post";
+
 interface User {
   username: string;
   avatar: string;
 }
-*/
-/*
 
 interface Reaction {
   username: string;
   reaction: string;
 }
-*/
-/*
+
 interface Post {
-  id: string;
+  id: number;
   title: string;
   description: string;
   lang: string;
@@ -26,78 +23,94 @@ interface Post {
   user_id: string;
   reactions: Reaction[];
 }
-*/
+
 
 const usePost = () => {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const { data: postData, error }: any = await supabase
+      const { data: postData, error }: { data: Post[] | null, error: Error | null } = await supabase
         .from(table)
-        .select<any>("*");
+        .select<Post[]>("*");
       if (error) throw error;
       setData(postData || []);
       setLoading(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
       setLoading(false);
     }
   };
+  
+  const getSinglePost = async (id: number): Promise<Post[] | null> => {
+    try {
+      const { data: postData, error }: { data: Post[] | null, error: Error | null } = await supabase
+        .from(table)
+        .select<Post>("*")
+        .eq("id", id)
+        .single();
+      if (error) throw error;
+      return (postData);
+      return 
+    } catch (error: unknown) {
+      setError(error.message);
+      return null;
+    }
+  };
 
-  const createPost = async (newRecord: any) => {
+  const createPost = async (newRecord: Post[]) => {
     try {
       setLoading(true);
-      const { error: createError }: any = await supabase
+      const { error: createError } = await supabase
         .from(table)
         .insert([newRecord]);
         
       if (createError) throw createError;
       
       return true;
-    } catch (createError: any) {
+    } catch (createError: unknown) {
       setError(createError.message);
       return false;
     } finally {
       setLoading(false);
     }
   };
-  const updatePost = async (id: number, updatedFields: Partial<any>) => {
+  
+  async function updatePost<T>(id: number, updatedFields: Partial<T>): Promise<boolean> {
     try {
       setLoading(true);
-      const { error: updateError }: any = await supabase
+      const { error: updateError } = await supabase
         .from(table)
         .update(updatedFields)
         .eq("id", id);
       if (updateError) throw updateError;
       setLoading(false);
       return true;
-    } catch (updateError: any) {
-      setError(updateError.message);
+    } catch (updateError) {
+      setError((updateError as Error).message); // Cast updateError to Error
       setLoading(false);
       return false;
     }
-};
+}
 
 
-const deletePost = async (id: string) => {
+
+const deletePost = async (id: number) => {
     try {
       setLoading(true);
-      const { error }: any = await supabase.from(table).delete().eq("id", id);
+      const { error } = await supabase.from(table).delete().eq("id", id);
       if (error) throw error;
       setLoading(false);
       return true;
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
       setLoading(false);
       return false;
     }
   };
-
-
   
 
   useEffect(() => {
@@ -111,6 +124,7 @@ const deletePost = async (id: string) => {
     createPost,
     updatePost,
     deletePost,
+    getSinglePost
   };
 };
 

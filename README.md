@@ -3,7 +3,8 @@
 **SpeedSnippet** is a platform where you can share your code snippets to help pther developers.
 
 > [!IMPORTANT]  
-> This project is still under development and hasn't enter beta stage yet. Everything is still subject to change. This is a personal project.
+> This project is now in the beta stage, available at [https://speed-snippet.vercel.app](https://speed-snippet.vercel.app). Yet, it's still under development and subject to change since it's a personal project.
+
 
 Like this project? **Leave a star**! ⭐⭐⭐⭐⭐
 

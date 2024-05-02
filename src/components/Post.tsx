@@ -1,4 +1,3 @@
-import React from "react";
 import { cn } from "@/lib/utils";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { Icon } from "@iconify/react";
@@ -10,22 +9,9 @@ import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { usePost } from '@/hooks/usePost';
-import { useState, useEffect } from 'react';
-type PostProps = {
-  children: React.ReactNode;
-  className?: string;
-};
-
-type CaptionProps = {
-  title: string;
-  description: string;
-};
-
-type CodeSnippetProps = {
-  code: string;
-  lang: string;
-  reactions: ReactionType[];
-};
+import React, { useState, useEffect, createContext, useContext } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from "react-router-dom";
 
 type ReactionType = {
   username: string;
@@ -38,35 +24,92 @@ type ReactionFilterType = {
   isAwesome: boolean;
 };
 
-function reactionsFilter(reactions: ReactionType[]): ReactionFilterType {
-  const isAwesome =
-    reactions.filter((item) => item.reaction === "awesome").length >
-    reactions.filter((item) => item.reaction === "trash").length;
+interface User {
+  username: string;
+  avatar: string;
+}
 
-  let most = 0;
-  if (isAwesome) {
-    most = reactions.filter((item) => item.reaction === "awesome").length;
-  } else {
-    most = reactions.filter((item) => item.reaction === "trash").length;
+interface Reaction {
+  username: string;
+  reaction: string;
+}
+
+
+interface PostContextType {
+  id: number;
+  title: string;
+  description: string;
+  lang: string;
+  code: string;
+  user: User;
+  user_id: string;
+  reactions: Reaction[];
+}
+
+interface PostProps {
+  children: React.ReactNode;
+  className?: string;
+  post: PostContextType;
+}
+const PostContext = createContext<PostContextType>({} as PostContextType);
+
+const usePostContext = () => {
+  const context = useContext(PostContext);
+  if (!context) {
+    throw new Error("Post is used outside of Post Parent");
   }
+  return context;
+};
+
+function reactionsFilter(reactions: Reaction[]): ReactionFilterType {
+  const uniqueReactions: { [key: string]: Reaction } = {};
+
+  reactions.forEach(item => {
+    uniqueReactions[item.username] = item;
+  });
+
+  let awesomeCount = 0;
+  let trashCount = 0;
+
+  Object.values(uniqueReactions).forEach(item => {
+    if (item.reaction === "awesome") {
+      awesomeCount++;
+    } else if (item.reaction === "trash") {
+      trashCount++;
+    }
+  });
+
+  const isAwesome = awesomeCount > trashCount;
+  const most = Math.max(awesomeCount, trashCount);
 
   return {
     isAwesome,
     most,
-    total: reactions.length,
+    total: Object.keys(uniqueReactions).length,
   };
 }
 
-function Post({ children, className }: PostProps) {
+
+
+function Post({ children, className, post }: PostProps) {
+  const navigate = useNavigate();
   return (
-    <div className={cn("w-full", className)}>
-      {children}
-    </div>
+    <PostContext.Provider value={post}>
+      <div onClick={() => navigate(`/post/${post.id}?from=explore`)} className={cn("w-full", className)}>
+        {children}
+      </div>
+    </PostContext.Provider>
   );
 }
 
-function Header({ username, avatar }: { username: string; avatar: string }) {
+function Header() {
+  const post = usePostContext();
+  const { username, avatar } = post.user;
+  const handleOption = () => {
+    alert("Feature not available!");
+  }
   return (
+    <>
     <div className="bg-white dark:bg-gray-950 w-full py-2 flex flex-row items-center justify-between">
       <div className="flex items-center">
         <Avatar className="ml-4 border-2 border-gray-300 dark:border-gray-800">
@@ -78,15 +121,18 @@ function Header({ username, avatar }: { username: string; avatar: string }) {
         </h1>
       </div>
       <div className="justify-center">
-        <button className="mt-2 dark:text-gray-600 text-2xl mr-4">
+        <button onClick={handleOption} className="mt-2 dark:text-gray-600 text-2xl mr-4">
           <Icon icon="mingcute:dots-line" />
         </button>
       </div>
     </div>
+    </>
   );
 }
 
-function Caption({ title, description }: CaptionProps) {
+function Caption() {
+  const post = usePostContext();
+  const { title, description } = post;
   return (
     <div className="border-t border-gray-300 dark:border-gray-800 flex flex-col">
       <div className="flex flex-row items-center mt-4">
@@ -101,9 +147,11 @@ function Caption({ title, description }: CaptionProps) {
   );
 }
 
-function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
+function CodeSnippet() {
+  const post = usePostContext();
   const { theme } = useTheme();
   const [copied, setCopied] = useState(false);
+  const { reactions, code, lang } = post;
   const { total, most, isAwesome } = reactionsFilter(reactions);
   
   
@@ -144,14 +192,24 @@ function CodeSnippet({ code, lang, reactions }: CodeSnippetProps) {
   );
 }
 
-function Reaction({ id, user_id }: { id: number, user_id: string }) {
+interface UpdateType {
+  reactions: ReactionType[]
+}
+
+function Reaction() {
+  const post = usePostContext();
+  const { user } = useAuth();
+  
+  const user_id = user?.id;
+  
+  const { id } = post;
   const { data, updatePost } = usePost();
   const [cReaction, setcReaction] = useState("");
 
   useEffect(() => {
-    const post = data.find(p => p.id === id);
-    if (post) {
-      const userReaction = post.reactions.find((u: { username: string, reaction: string }) => u.username === user_id);
+    const currentPost = data.find(p => p.id === id);
+    if (currentPost) {
+      const userReaction = currentPost.reactions.find((u: { username: string, reaction: string }) => u.username === user_id);
 
       if (userReaction) {
         setcReaction(userReaction.reaction);
@@ -161,9 +219,10 @@ function Reaction({ id, user_id }: { id: number, user_id: string }) {
 
   const handleReaction = async (postID: number, reaction: string): Promise<void> => {
     setcReaction(reaction);
+    
     if (!data) return;
     
-    const post = data.find(p => p.id === postID);
+    
     if (!post) return;
     
     const existingReactionIndex = post.reactions.findIndex((u: { username: string, reaction: string }) => u.username === user_id);
@@ -172,7 +231,7 @@ function Reaction({ id, user_id }: { id: number, user_id: string }) {
       const fields = {
         reactions: [...post.reactions, { username: user_id, reaction: reaction }]
       };
-      await updatePost(postID, fields);
+      await updatePost<UpdateType>(postID, fields);
     } else {
       // If User has already reacted, update existing reaction
       const updatedReactions = [...post.reactions];
@@ -181,7 +240,7 @@ function Reaction({ id, user_id }: { id: number, user_id: string }) {
       const fields = {
         reactions: updatedReactions
       };
-      await updatePost(postID, fields);
+      await updatePost<UpdateType>(postID, fields);
     }
   }
 

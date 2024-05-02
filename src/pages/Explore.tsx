@@ -39,26 +39,15 @@ export default function Explore() {
         <div className="w-full md:w-[60%] md:shadow-lg">
           {!loading ? (
             posts.map((post, index) => (
-              <Post key={index}>
-                <Post.Header
-                  username={post.user.username}
-                  avatar={post.user.avatar}
-                />
-                <Post.Caption
-                  title={post.title}
-                  description={post.description}
-                />
-                <Post.CodeSnippet
-                  reactions={post.reactions}
-                  lang={post.lang}
-                  code={post.code}
-                />
-                <Post.Reaction user_id={user?.id} id={post?.id} />
+              <Post post={post} key={index}>
+                <Post.Header />
+                <Post.Caption />
+                <Post.CodeSnippet />
+                <Post.Reaction />
               </Post>
             ))
           ) : (
             <>
-              <SkeletonLoading />
               <SkeletonLoading />
             </>
           )}

@@ -69,7 +69,7 @@ export default function CreatePost() {
     setTimeout(() => {
       navigate("/");
     }, 3000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setUploading(false);
       console.log(err);
       toast({
@@ -82,7 +82,7 @@ export default function CreatePost() {
   return (
     <>
     <div className="h-full w-full bg-white dark:bg-gray-950 pb-10">
-      <Header back="/" />
+      <Header back="/" title="Create Snippet" />
 
       <div className="w-full pt-14 flex flex-col md:flex-row md:justify-between">
       

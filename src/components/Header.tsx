@@ -6,9 +6,11 @@ import { ModeToggle } from "@/components/theme-toggle";
 export default function Header({
   back,
   className,
+  title
 }: {
   back: string;
   className?: string;
+  title: string;
 }) {
   return (
     <nav
@@ -23,7 +25,7 @@ export default function Header({
             <ChevronLeft className="text-gray-700 dark:text-white" />
           </Link>
         </Button>
-        <h1 className="text-xl font-medium">Create Snippet</h1>
+        <h1 className="text-xl font-medium">{title}</h1>
       </div>
       <div className="mx-4">
         <ModeToggle />

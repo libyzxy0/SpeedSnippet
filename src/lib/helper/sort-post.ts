@@ -1,17 +1,35 @@
-export function sortPost(posts: any[]): any[] {
-  if (posts && posts.length > 0) {
-    return posts.sort((a: any, b: any) => {
-      // Sort by reaction count in descending order
-      const reactionsA = a.reactions ? a.reactions.filter((reaction: any) => reaction.reaction === "awesome").length : 0;
-      const reactionsB = b.reactions ? b.reactions.filter((reaction: any) => reaction.reaction === "awesome").length : 0;
+interface User {
+  username: string;
+  avatar: string;
+}
 
-      // If reactions are equal, prioritize "awesome" over "trash"
+interface Reaction {
+  username: string;
+  reaction: string;
+}
+
+interface Post {
+  id: number;
+  title: string;
+  description: string;
+  lang: string;
+  code: string;
+  user: User;
+  user_id: string;
+  reactions: Reaction[];
+}
+
+export function sortPost(posts: Post[]): Post[] {
+  if (posts && posts.length > 0) {
+    return posts.sort((a: Post, b: Post) => {
+      const reactionsA = a.reactions ? a.reactions.filter((reaction: Reaction) => reaction.reaction === "awesome").length : 0;
+      const reactionsB = b.reactions ? b.reactions.filter((reaction: Reaction) => reaction.reaction === "awesome").length : 0;
+
       if (reactionsA !== reactionsB) {
         return reactionsB - reactionsA;
       } else {
-        // Put posts with "trash" reactions at the bottom
-        const trashA = a.reactions ? a.reactions.filter((reaction: any) => reaction.reaction === "trash").length : 0;
-        const trashB = b.reactions ? b.reactions.filter((reaction: any) => reaction.reaction === "trash").length : 0;
+        const trashA = a.reactions ? a.reactions.filter((reaction: Reaction) => reaction.reaction === "trash").length : 0;
+        const trashB = b.reactions ? b.reactions.filter((reaction: Reaction) => reaction.reaction === "trash").length : 0;
         return trashA - trashB;
       }
     });
