@@ -50,7 +50,7 @@ export default function ViewPost() {
     handleFetch();
   }, [postID]);
   
-  function truncateText(text, maxLength) {
+  function truncateText(text:string, maxLength: number): string {
     if (text.length > maxLength) {
         return text.substring(0, maxLength) + '...';
     } else {

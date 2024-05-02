@@ -194,6 +194,7 @@ function Header() {
             Edit Post
           </DropdownMenuItem>
           <DropdownMenuItem
+            onClick={() => deletePost(post.id)}
             className="bg-red-500 my-2 text-white hover:bg-red-400"
           >
             Delete Post
