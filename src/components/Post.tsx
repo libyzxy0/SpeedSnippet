@@ -2,8 +2,8 @@ import { cn } from "@/lib/utils";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { Icon } from "@iconify/react";
 import {
-  atomOneDark,
   atomOneLight,
+  nightOwl
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
@@ -117,6 +117,7 @@ function Header() {
   const post = usePostContext();
   const navigate = useNavigate();
   const { user: { username, avatar } } = post;
+  const { user } = useAuth();
   
   const handleCopy = async (): Promise<void> => {
     if(window.location.hostname) {
@@ -181,7 +182,10 @@ function Header() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="py-2 my-2 hover:bg-gray-800">Report abuse</DropdownMenuItem>
+          { user && user?.id === post.user.username ? (
+          <>
           <DropdownMenuSeparator />
+          
           <DropdownMenuItem
             className="bg-sky-400 my-2 text-white hover:bg-sky-500"
           >
@@ -192,6 +196,10 @@ function Header() {
           >
             Delete Post
           </DropdownMenuItem>
+          </>
+         ) : (
+           null
+         )}
         </DropdownMenuContent>
       </DropdownMenu>
       </div>
@@ -244,19 +252,21 @@ function CodeSnippet() {
   return (
     
     <div className="px-4 pt-4 flex flex-col">
-      <div className="bg-gray-200 dark:bg-gray-700 h-8 rounded-tl-lg rounded-tr-lg flex items-center flex-row justify-between">
+      <div className="bg-gray-200 dark:bg-gray-800 h-9 rounded-tl-md rounded-tr-md flex items-center flex-row justify-between">
         <p className="dark:text-gray-400 text-sm mx-3">{lang}</p>
         <button onClick={handleCopy} className={`outline-none border-none mx-3 text-xl ${copied ? "text-sky-400" : "dark:text-gray-400"}`}>
           <Icon icon={copied ? "iconamoon:check-fill" : "mynaui:copy"} />
         </button>
       </div>
+      <div className={`p-1.5 rounded-bl-md rounded-br-md ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
       <SyntaxHighlighter
-        className={`text-sm rounded-bl-lg rounded-br-lg ${theme === "dark" ? "codebg-black" : "codebg-white"}`}
+        className="text-s transparent"
         language={lang}
-        style={theme === "dark" ? atomOneDark : atomOneLight}
+        style={theme === "dark" ? nightOwl : atomOneLight}
       >
         {code}
       </SyntaxHighlighter>
+      </div>
       <p className="text-sm mt-5 mb-2 text-gray-400 dark:text-gray-600">
         {rtext}
       </p>
