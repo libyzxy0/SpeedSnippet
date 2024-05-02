@@ -45,7 +45,7 @@ const usePost = () => {
     }
   };
   
-  const getSinglePost = async (id?: number): Promise<Post[] | null> => {
+  const getSinglePost = async (id?: number): Promise<Post | null> => {
     try {
       const { data: postData, error }: any  = await supabase
         .from(table)
@@ -70,7 +70,7 @@ const usePost = () => {
       if (createError) throw createError;
       
       return true;
-    } catch (createError: unknown) {
+    } catch (createError: any) {
       setError(createError.message);
       return false;
     } finally {
@@ -104,7 +104,7 @@ const deletePost = async (id: number) => {
       if (error) throw error;
       setLoading(false);
       return true;
-    } catch (error: unknown) {
+    } catch (error: any) {
       setError(error.message);
       setLoading(false);
       return false;
