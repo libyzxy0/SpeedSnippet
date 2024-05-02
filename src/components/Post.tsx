@@ -55,6 +55,7 @@ interface PostContextType {
   user_id: string;
   reactions: Reaction[];
   rtext?: string;
+  handleChangeReaction?: (reactions: Reaction[]) => void;
 }
 
 interface PostProps {
