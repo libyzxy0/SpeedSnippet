@@ -116,8 +116,9 @@ function Post({ children, className, post }: PostProps) {
 function Header() {
   const post = usePostContext();
   const navigate = useNavigate();
-  const { user: { username, avatar } } = post;
-  const { user } = useAuth();
+  const { user_id, user: { username, avatar } } = post;
+  
+  const { user: authenticated } = useAuth();
   
   const handleCopy = async (): Promise<void> => {
     if(window.location.hostname) {
@@ -182,7 +183,7 @@ function Header() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="py-2 my-2 hover:bg-gray-800">Report abuse</DropdownMenuItem>
-          { user && user?.id === post.user.username ? (
+          { authenticated && authenticated?.id == user_id ? (
           <>
           <DropdownMenuSeparator />
           
