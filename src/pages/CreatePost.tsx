@@ -17,6 +17,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+interface User {
+  username: string;
+  avatar: string;
+}
+
+interface Reaction {
+  username: string;
+  reaction: string;
+}
+
+interface Post {
+  id: number;
+  title: string;
+  description: string;
+  lang: string;
+  code: string;
+  user: User;
+  user_id: string;
+  reactions: Reaction[];
+}
 
 import { Input } from "@/components/ui/input";
 
@@ -43,7 +63,7 @@ export default function CreatePost() {
   const handlePost = async (): Promise<void> => {
     try {
       setUploading(true);
-    const data = {
+    const data: Post = {
       id: Math.floor(Math.random() * 100000000), 
       user_id: user.id,
       user: {

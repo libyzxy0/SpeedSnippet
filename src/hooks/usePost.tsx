@@ -33,35 +33,34 @@ const usePost = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const { data: postData, error }: { data: Post[] | null, error: Error | null } = await supabase
+      const { data: postData, error }: any = await supabase
         .from(table)
-        .select<Post[]>("*");
+        .select("*");
       if (error) throw error;
       setData(postData || []);
       setLoading(false);
-    } catch (error: unknown) {
+    } catch (error: any) {
       setError(error.message);
       setLoading(false);
     }
   };
   
-  const getSinglePost = async (id: number): Promise<Post[] | null> => {
+  const getSinglePost = async (id?: number): Promise<Post[] | null> => {
     try {
-      const { data: postData, error }: { data: Post[] | null, error: Error | null } = await supabase
+      const { data: postData, error }: any  = await supabase
         .from(table)
-        .select<Post>("*")
+        .select("*")
         .eq("id", id)
         .single();
       if (error) throw error;
-      return (postData);
-      return 
-    } catch (error: unknown) {
+      return postData;
+    } catch (error: any) {
       setError(error.message);
       return null;
     }
   };
 
-  const createPost = async (newRecord: Post[]) => {
+  const createPost = async (newRecord: Post) => {
     try {
       setLoading(true);
       const { error: createError } = await supabase
@@ -89,8 +88,8 @@ const usePost = () => {
       if (updateError) throw updateError;
       setLoading(false);
       return true;
-    } catch (updateError) {
-      setError((updateError as Error).message); // Cast updateError to Error
+    } catch (updateError: any) {
+      setError((updateError as Error).message);
       setLoading(false);
       return false;
     }
