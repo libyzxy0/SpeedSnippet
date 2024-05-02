@@ -55,7 +55,6 @@ interface PostContextType {
   user_id: string;
   reactions: Reaction[];
   rtext?: string;
-  handleChangeReaction: () => void;
 }
 
 interface PostProps {
@@ -106,7 +105,7 @@ function reactionsFilter(reactions: Reaction[]): ReactionFilterType {
 function Post({ children, className, post }: PostProps) {
   const [rtext, setRText] = useState("");
   
-  const handleChangeReaction = (reactions: ReactionType[]): void => {
+  const handleChangeReaction = (reactions: Reaction[]) => {
     const { total, most, isAwesome } = reactionsFilter(reactions);
     const crtext = total == 0 ? "" : `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
     setRText(crtext);
@@ -324,7 +323,7 @@ function Reaction() {
       const fields = {
         reactions: [...post.reactions, { username: user_id, reaction: reaction }]
       };
-      post.handleChangeReaction(fields.reactions)
+      post.handleChangeReaction(fields.reactions);
       await updatePost<UpdateType>(postID, fields);
     } else {
       // If User has already reacted, update existing reaction
