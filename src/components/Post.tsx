@@ -116,6 +116,7 @@ function Post({ children, className, post }: PostProps) {
 function Header() {
   const post = usePostContext();
   const navigate = useNavigate();
+  const { deletePost } = usePost();
   const { user_id, user: { username, avatar } } = post;
   
   const { user: authenticated } = useAuth();
@@ -259,7 +260,7 @@ function CodeSnippet() {
           <Icon icon={copied ? "iconamoon:check-fill" : "mynaui:copy"} />
         </button>
       </div>
-      <div className={`p-1.5 rounded-bl-md rounded-br-md ${theme === "dark" ? "bg-gray-900" : "bg-white"}`}>
+      <div className={`p-1.5 rounded-bl-md rounded-br-md ${theme === "dark" ? "bg-gray-900" : "bg-gray-50"}`}>
       <SyntaxHighlighter
         className="text-s transparent"
         language={lang}

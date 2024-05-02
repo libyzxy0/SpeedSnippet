@@ -4,6 +4,7 @@ import { usePost } from '@/hooks/usePost';
 import { useEffect, useState } from 'react';
 import Post from "@/components/Post";
 import SkeletonLoading from "@/components/skeleton-loading";
+import { Helmet } from "react-helmet";
 
 interface User {
   username: string;
@@ -48,9 +49,20 @@ export default function ViewPost() {
     };
     handleFetch();
   }, [postID]);
-
+  
+  function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+        return text.substring(0, maxLength) + '...';
+    } else {
+        return text;
+    }
+  }
   return (
     <>
+      <Helmet>
+          <title>{data ? `${data?.title} by ${data?.user.username}: ${truncateText(data?.description, 40)}` : "Check this post!"}</title>
+          <meta name="description" content={data?.description} />
+        </Helmet>
       <Header back="/" title={data !== null ? data?.user.username + "'s post" : "Loading post..."} />
       <div className="md:flex md:justify-center">
         <div className="w-full md:w-[60%] md:shadow-lg">

@@ -119,7 +119,7 @@ function NavbarAvatar({
         </DropdownMenuContent>
       </DropdownMenu>
       <AlertDialog open={open}>
-        <AlertDialogContent className="bg-white dark:bg-gray-950 rounded-lg border border-gray-800">
+        <AlertDialogContent className="bg-white dark:bg-gray-950 rounded-lg border bg-gray-300 dark:border-gray-900">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure to logout?</AlertDialogTitle>
             <AlertDialogDescription>
