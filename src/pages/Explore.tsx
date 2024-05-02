@@ -4,9 +4,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { usePost } from "@/hooks/usePost";
 import SkeletonLoading from "@/components/skeleton-loading";
 import { getUsername } from "@/lib/helper/username-getter.ts";
+import { sortPost } from "@/lib/helper/sort-post.ts";
 export default function Explore() {
   const { user } = useAuth();
-  const { data: posts, loading } = usePost();
+  const { data: rawPost , loading } = usePost();
+  const posts = sortPost(rawPost);
   return (
     <>
       <div className="h-full w-full bg-white dark:bg-gray-950">
