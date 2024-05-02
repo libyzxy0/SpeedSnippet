@@ -47,7 +47,7 @@ export default function ViewPost() {
       }
     };
     handleFetch();
-  });
+  }, [postID]);
 
   return (
     <>
