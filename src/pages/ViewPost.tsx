@@ -39,6 +39,7 @@ export default function ViewPost() {
         try {
           const postData = await getSinglePost(parseInt(postID));
           setData(postData);
+          setLoading(false);
         } catch (error) {
           console.error('Error fetching post:', error);
           setLoading(false);
