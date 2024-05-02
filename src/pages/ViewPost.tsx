@@ -25,20 +25,25 @@ interface Post {
   reactions: Reaction[];
 }
 export default function ViewPost() {
-  const { postID } = useParams();
+  const { postID } = useParams<{ postID: string }>();
   const { getSinglePost } = usePost();
-  const [data, setData] = useState<Post>(null);
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<Post>({});
+  const [loading, setLoading] = useState<boolean>(false); 
+
   useEffect(() => {
     const handleFetch = async () => {
       setLoading(true);
-      const postData = await getSinglePost(parseInt(postID));
-      console.log(postData);
-      setData(postData);
-      setLoading(false);
+      try {
+        const postData = await getSinglePost(parseInt(postID));
+        setData(postData);
+      } catch (error) {
+        console.error('Error fetching post:', error);
+      } finally {
+        setLoading(false);
+      }
     }
     handleFetch();
-  });
+  }, [getSinglePost, postID]);
   
   return (
     <>
@@ -47,7 +52,7 @@ export default function ViewPost() {
       <div className="w-full md:w-[60%] md:shadow-lg">
       {!loading && data ? (
         <div>
-          <Post post={data ? data : null}>
+          <Post post={data}>
             <Post.Header />
             <Post.Caption />
             <Post.CodeSnippet />
