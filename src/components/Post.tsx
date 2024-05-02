@@ -12,6 +12,16 @@ import { usePost } from '@/hooks/usePost';
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type ReactionType = {
   username: string;
@@ -94,19 +104,47 @@ function reactionsFilter(reactions: Reaction[]): ReactionFilterType {
 function Post({ children, className, post }: PostProps) {
   return (
     <PostContext.Provider value={post}>
+    <>
       <div className={cn("w-full", className)}>
         {children}
       </div>
+      </>
     </PostContext.Provider>
   );
 }
 
 function Header() {
   const post = usePostContext();
-  const { username, avatar } = post.user;
-  const handleOption = () => {
-    alert("Feature not available!");
+  const navigate = useNavigate();
+  const { user: { username, avatar } } = post;
+  
+  const handleCopy = async (): Promise<void> => {
+    if(window.location.hostname) {
+      try {
+        await navigator.clipboard.writeText(`${window.location.protocol}${window.location.host}/post/${post.id}?from=copylink`);
+      } catch (err) {
+        console.error('Error copying text to clipboard: ', err);
+      }
+    }
+  };
+  
+  const handleShare = async (): Promise<void> => {
+    if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Speed Snippet",
+        text: `${post.title}: ${post.description}`,
+        url: `${window.location.protocol}/post/${post.id}?from=share`,
+      });
+      console.log('Successfully shared');
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+    } else {
+      console.log('Web Share API not supported');
+    }
   }
+  
   return (
     <>
     <div className="bg-white dark:bg-gray-950 w-full py-2 flex flex-row items-center justify-between">
@@ -120,9 +158,42 @@ function Header() {
         </h1>
       </div>
       <div className="justify-center">
-        <button onClick={handleOption} className="mt-2 dark:text-gray-600 text-2xl mr-4">
+      <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+      <button className="mt-2 dark:text-gray-600 text-2xl mr-4">
           <Icon icon="mingcute:dots-line" />
         </button>
+      </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-56 px-2">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem onClick={handleCopy} className="py-2 my-2 hover:bg-gray-800">
+              Copy link
+              <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleShare} className="py-2 my-2 hover:bg-gray-800">
+              Share
+            </DropdownMenuItem>
+            <DropdownMenuItem className="py-2 my-2 hover:bg-gray-800" onClick={() => navigate(`/post/${post.id}?from=explore`)}>
+              View Post
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="py-2 my-2 hover:bg-gray-800">Report abuse</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="bg-sky-400 my-2 text-white hover:bg-sky-500"
+          >
+            Edit Post
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="bg-red-500 my-2 text-white hover:bg-red-400"
+          >
+            Delete Post
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       </div>
     </div>
     </>
@@ -149,7 +220,6 @@ function Caption() {
 
 function CodeSnippet() {
   const post = usePostContext();
-  const navigate = useNavigate();
   const { theme } = useTheme();
   const [copied, setCopied] = useState(false);
   const { reactions, code, lang } = post;
@@ -173,7 +243,7 @@ function CodeSnippet() {
   const rtext = total == 0 ? "" : `${most} people says its ${isAwesome ? "Awesome ⚡" : "Trash 💩"}`;
   return (
     
-    <div onClick={() => navigate(`/post/${post.id}?from=explore`)} className="px-4 pt-4 flex flex-col">
+    <div className="px-4 pt-4 flex flex-col">
       <div className="bg-gray-200 dark:bg-gray-700 h-8 rounded-tl-lg rounded-tr-lg flex items-center flex-row justify-between">
         <p className="dark:text-gray-400 text-sm mx-3">{lang}</p>
         <button onClick={handleCopy} className={`outline-none border-none mx-3 text-xl ${copied ? "text-sky-400" : "dark:text-gray-400"}`}>

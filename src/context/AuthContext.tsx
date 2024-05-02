@@ -42,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const onChange = (_event: string, session: any | null) => {
+      console.log(session);
       setState((prevState) => ({
         ...prevState,
         session,

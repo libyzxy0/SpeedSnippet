@@ -88,7 +88,7 @@ function NavbarAvatar({
             <AvatarFallback>{fallback}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
+        <DropdownMenuContent className="w-56 px-3">
           <DropdownMenuLabel>{name}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
