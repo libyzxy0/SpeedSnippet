@@ -41,7 +41,6 @@ export default function ViewPost() {
           setData(postData);
         } catch (error) {
           console.error('Error fetching post:', error);
-        } finally {
           setLoading(false);
         }
       }
