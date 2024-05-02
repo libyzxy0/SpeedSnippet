@@ -55,7 +55,7 @@ interface PostContextType {
   user_id: string;
   reactions: Reaction[];
   rtext?: string;
-  handleChangeReaction?: () => void;
+  handleChangeReaction?: (reactions: Reaction[]) => void;
 }
 
 interface PostProps {
@@ -300,7 +300,7 @@ function Reaction() {
 
   useEffect(() => {
     const currentPost = data.find(p => p.id === id);
-    post.handleChangeReaction(post.reactions);
+    post?.handleChangeReaction(post.reactions);
     if (currentPost) {
       const userReaction = currentPost.reactions.find((u: { username: string, reaction: string }) => u.username === user_id);
 
@@ -324,7 +324,7 @@ function Reaction() {
       const fields = {
         reactions: [...post.reactions, { username: user_id, reaction: reaction }]
       };
-      post.handleChangeReaction(fields.reactions);
+      post?.handleChangeReaction(fields.reactions);
       await updatePost<UpdateType>(postID, fields);
     } else {
       // If User has already reacted, update existing reaction
@@ -334,7 +334,7 @@ function Reaction() {
       const fields = {
         reactions: updatedReactions
       };
-      post.handleChangeReaction(fields.reactions)
+      post?.handleChangeReaction(fields.reactions)
       await updatePost<UpdateType>(postID, fields);
     }
   }
