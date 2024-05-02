@@ -51,7 +51,7 @@ interface PostProps {
   className?: string;
   post: PostContextType;
 }
-const PostContext = createContext<PostContextType | null>({});
+const PostContext = createContext<PostContextType | null>(null);
 
 const usePostContext = () => {
   const context = useContext(PostContext);

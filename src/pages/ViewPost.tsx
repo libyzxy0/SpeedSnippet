@@ -4,6 +4,7 @@ import { usePost } from '@/hooks/usePost';
 import { useEffect, useState } from 'react';
 import Post from "@/components/Post";
 import SkeletonLoading from "@/components/skeleton-loading";
+
 interface User {
   username: string;
   avatar: string;
@@ -24,11 +25,12 @@ interface Post {
   user_id: string;
   reactions: Reaction[];
 }
+
 export default function ViewPost() {
   const { postID } = useParams<{ postID: string }>();
   const { getSinglePost } = usePost();
-  const [data, setData] = useState<Post>({});
-  const [loading, setLoading] = useState<boolean>(false); 
+  const [data, setData] = useState<Post | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const handleFetch = async () => {
@@ -41,28 +43,28 @@ export default function ViewPost() {
       } finally {
         setLoading(false);
       }
-    }
+    };
     handleFetch();
   }, [getSinglePost, postID]);
   
   return (
     <>
-      <Header back="/" title={data ? data.user.username + "'s" + " post" : "Loading post..."} />
+      <Header back="/" title={data.user.username + "'s post"} />
       <div className="md:flex md:justify-center">
-      <div className="w-full md:w-[60%] md:shadow-lg">
-      {!loading && data ? (
-        <div>
-          <Post post={data}>
-            <Post.Header />
-            <Post.Caption />
-            <Post.CodeSnippet />
-            <Post.Reaction />
-          </Post>
+        <div className="w-full md:w-[60%] md:shadow-lg">
+          {!loading && data ? (
+            <div>
+              <Post post={data}>
+                <Post.Header />
+                <Post.Caption />
+                <Post.CodeSnippet />
+                <Post.Reaction />
+              </Post>
+            </div>
+          ) : (
+            <SkeletonLoading />
+          )}
         </div>
-      ) : (
-          <SkeletonLoading />
-      )}
-      </div>
       </div>
     </>
   )
