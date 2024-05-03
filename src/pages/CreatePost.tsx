@@ -10,6 +10,8 @@ import { usePost } from '@/hooks/usePost';
 import { Toaster } from "@/components/ui/toaster";
 import { getUsername } from "@/lib/helper/username-getter.ts";
 import { useToast } from "@/components/ui/use-toast";
+
+import { checkContent } from '@/lib/helper/post-checker.ts';
 import {
   Select,
   SelectContent,
@@ -63,6 +65,18 @@ export default function CreatePost() {
   const handlePost = async (): Promise<void> => {
     try {
       setUploading(true);
+      
+      const check = await checkContent(`Title:${title}:Description:${description}:Code:${code}`);
+      console.log("Check:", check);
+      if(check) {
+      if(check.isHarmful) {
+        toast({
+          title: "Failed to post!",
+          description: check.reason,
+        });
+        setUploading(false);
+      } else {
+      
     const data: Post = {
       id: Math.floor(Math.random() * 100000000), 
       user_id: user.id,
@@ -89,6 +103,13 @@ export default function CreatePost() {
     setTimeout(() => {
       navigate("/");
     }, 3000);
+      }
+      } else {
+        toast({
+      title: "Error",
+      description: "Failed to post, server error!",
+    });
+      }
     } catch (err: unknown) {
       setUploading(false);
       console.log(err);
