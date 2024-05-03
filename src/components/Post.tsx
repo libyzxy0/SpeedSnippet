@@ -134,7 +134,7 @@ function Header() {
   const handleCopy = async (): Promise<void> => {
     if(window.location.hostname) {
       try {
-        await navigator.clipboard.writeText(`${window.location.protocol}${window.location.host}/post/${post.id}?from=copylink`);
+        await navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/post/${post.id}?from=copylink`);
       } catch (err) {
         console.error('Error copying text to clipboard: ', err);
       }
