@@ -27,7 +27,7 @@ interface Answer {
   user: User;
   code: string;
   lang: string;
-  created_at?: Date;
+  created_at: any;
   reactions: Reaction[];
 }
 
@@ -70,7 +70,7 @@ function AnswerProvider({ children, answer, post_user }: AnswerProps) {
             </h1>
             <div className="flex flex-row justify-between">
               <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
-                {new Intl.DateTimeFormat('en-US', {month:'short', day:'2-digit', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true}).format(new Date(answer.created_at))}
+                {answer && new Intl.DateTimeFormat('en-US', {month:'short', day:'2-digit', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true}).format(new Date(answer.created_at))}
               </div>
               {/*  
             <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 mt-2">Best Answer</span>
