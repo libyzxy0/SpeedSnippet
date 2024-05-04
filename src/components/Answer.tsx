@@ -161,7 +161,7 @@ function Reaction() {
   useEffect(() => {
     const reactionCounts = reactions.reduce(
       (acc, cur) => {
-        acc[cur.reaction]++;
+        acc[cur.reaction as "awesome" | "trash"]++;
         if (cur.username === user.username) {
           setUserReaction(cur.reaction);
         }
@@ -192,7 +192,7 @@ function Reaction() {
       );
       newData.push({ username: user.username, reaction });
 
-      await updateAnswer<any>(answerID, {
+      await updateAnswer<UpdateType>(answerID, {
         reactions: newData,
       });
     } catch (error) {
