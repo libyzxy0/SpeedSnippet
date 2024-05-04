@@ -7,6 +7,9 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { useTheme } from "@/components/theme-provider";
 import { Icon } from "@iconify/react";
 import React, { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+
+import { getUsername } from "@/lib/helper/username-getter.ts";
 
 interface Reaction {
   username: string;
@@ -32,6 +35,7 @@ interface Answer {
 interface AnswerProps {
   children: React.ReactNode;
   answer: Answer;
+  post_user: string;
 }
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -45,7 +49,8 @@ const useAnswerContext = () => {
   return context;
 };
 
-function AnswerProvider({ children, answer }: AnswerProps) {
+function AnswerProvider({ children, answer, post_user }: AnswerProps) {
+  const { user } = useAuth();
   return (
     <AnswerContext.Provider value={answer}>
       <div className="relative border-s-2 border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none">
@@ -60,8 +65,8 @@ function AnswerProvider({ children, answer }: AnswerProps) {
           </span>
           <div className="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-900 dark:border-gray-800 md:flex md:flex-col md:items-start">
             <h1 className="text-md text-gray-700 dark:text-white">
-              <b className="font-medium">libyzxy0</b> answered to{" "}
-              <b className="font-medium">libyzxy0's</b> post
+              <b className="font-medium">{getUsername(user)}</b> answered to{" "}
+              <b className="font-medium">{post_user}'s</b> post
             </h1>
             <div className="flex flex-row justify-between">
               <div className="text-sm font-normal text-gray-500 dark:text-gray-300">

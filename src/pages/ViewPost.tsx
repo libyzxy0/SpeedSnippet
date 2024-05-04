@@ -155,7 +155,7 @@ export default function ViewPost() {
               </h1>
               {answers &&
                 answers.map((answer, index) => (
-                  <Answer answer={answer} key={index}>
+                  <Answer post_user={data && data.user.username} answer={answer} key={index}>
                     <Answer.Content />
                     <Answer.Code />
                     <Answer.Reaction />
