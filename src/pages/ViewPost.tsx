@@ -149,7 +149,7 @@ export default function ViewPost() {
                 <Post.Reaction />
               </Post>
               <h1 className="text-xl dark:text-white text-gray-700 font-medium mx-5 mt-5">
-                Answers on itslibyzxy0's post
+                Answers on {data && data.user.username}'s post
               </h1>
               {answers &&
                 answers.map((answer, index) => (
@@ -181,7 +181,7 @@ export default function ViewPost() {
                 </PopoverTrigger>
                 <PopoverContent>
                   <h1 className="text-gray-700 text-lg font-medium dark:text-white">
-                    Answer libyzxy0 post
+                    Answer {data && data.user.username} post
                   </h1>
                   <Textarea
                     value={typedAnswer}
