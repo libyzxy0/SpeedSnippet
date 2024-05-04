@@ -149,12 +149,11 @@ function Code() {
 
 interface UpdateType {
   reactions: Reaction[];
-}
-function Reaction() {
+}function Reaction() {
   const { reactions, id: answerID } = useAnswerContext();
   const { updateAnswer } = useAnswer();
   const { user } = useAuth();
-  const [userReaction, setUserReaction] = useState<"awesome" | "trash">("");
+  const [userReaction, setUserReaction] = useState<"awesome" | "trash" | null>(null); // Initialize with null
   const [countReaction, setCountReaction] = useState<{ awesome: number; trash: number }>({ awesome: 0, trash: 0 });
 
   useEffect(() => {
@@ -162,7 +161,7 @@ function Reaction() {
       (acc, cur) => {
         acc[cur.reaction]++;
         if (cur.username === user.username) {
-          setUserReaction(cur.reaction as "awesome" | "trash"); 
+          setUserReaction(cur.reaction as "awesome" | "trash");
         }
         return acc;
       },
@@ -182,7 +181,7 @@ function Reaction() {
     setCountReaction((prevCount) => ({
       ...prevCount,
       [reaction]: prevCount[reaction] + 1,
-      [userReaction]: prevCount[userReaction] - 1,
+      [userReaction as string]: prevCount[userReaction as string] - 1, // Type assertion
     }));
 
     try {
@@ -199,7 +198,7 @@ function Reaction() {
       setCountReaction((prevCount) => ({
         ...prevCount,
         [reaction]: prevCount[reaction] - 1,
-        [userReaction]: prevCount[userReaction] + 1,
+        [userReaction as string]: prevCount[userReaction as string] + 1, // Type assertion
       }));
     }
   };
@@ -221,6 +220,8 @@ function Reaction() {
     </div>
   );
 }
+
+
 
 
 AnswerProvider.Content = Content;
