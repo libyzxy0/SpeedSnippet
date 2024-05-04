@@ -6,7 +6,7 @@ import {
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { useTheme } from "@/components/theme-provider";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface Reaction {
   username: string;
@@ -28,6 +28,11 @@ interface Answer {
   lang: string;
   reactions: Reaction[];
 }
+
+interface AnswerProps {
+  children: React.ReactNode;
+  answer: Answer;
+}
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const AnswerContext = createContext<Answer | null>(null);
@@ -40,7 +45,7 @@ const useAnswerContext = () => {
   return context;
 };
 
-function AnswerProvider({ children, answer }) {
+function AnswerProvider({ children, answer }): AnswerProps {
   return (
     <AnswerContext.Provider value={answer}>
       <div className="relative border-s-2 border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none">

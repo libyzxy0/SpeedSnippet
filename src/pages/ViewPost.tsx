@@ -68,12 +68,12 @@ export default function ViewPost() {
     if (typedAnswer) {
       createAnswer({
         id: Math.floor(Math.random() * 100000000),
-        post_id: data?.id,
+        post_id: data.id,
         text: typedAnswer,
         code: code,
         lang: lang,
         user: {
-          user_id: user?.id,
+          user_id: user.id,
           displayName: getUsername(user),
           avatar: user?.user_metadata.avatar_url,
         },
@@ -86,7 +86,7 @@ export default function ViewPost() {
       setTypedAnwser("");
       setCode("");
       setLang("");
-      getAnswer(data?.id);
+      getAnswer(data.id);
     } else {
       toast({
         title: "Failed to submit answer",
@@ -100,7 +100,7 @@ export default function ViewPost() {
   useEffect(() => {
     const handleFetch = async () => {
       if (postID) {
-        getAnswer(postID);
+        getAnswer(parseInt(postID));
         setLoading(true);
         try {
           const postData = await getSinglePost(parseInt(postID));
@@ -165,9 +165,9 @@ export default function ViewPost() {
                     <li className="mb-5 ms-8">
                       <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
                         <Avatar className="border-2 border-gray-300 dark:border-gray-700">
-                          <AvatarImage src={answer.user.avatar} alt={"D"} />
+                          <AvatarImage src={user?.user_metadata.avatar_url} alt={"D"} />
                           <AvatarFallback>
-                            {answer.user.displayName.slice(0, 1).toUpperCase()}
+                            {getUsername(user).slice(0, 1).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                       </span>
