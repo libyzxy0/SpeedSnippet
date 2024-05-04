@@ -7,9 +7,6 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { useTheme } from "@/components/theme-provider";
 import { Icon } from "@iconify/react";
 import React, { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-
-import { getUsername } from "@/lib/helper/username-getter.ts";
 
 interface Reaction {
   username: string;
