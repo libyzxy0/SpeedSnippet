@@ -9,7 +9,7 @@ interface Reaction {
 }
 
 interface User {
-  username: string;
+  user_id: string;
   displayName: string;
   avatar?: string;
 }

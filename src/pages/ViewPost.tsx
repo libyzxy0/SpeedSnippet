@@ -30,9 +30,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 
 interface User {
-  displayName: string;
+  username: string;
   avatar: string;
-  user_id: number;
 }
 
 interface Reaction {
@@ -107,7 +106,7 @@ export default function ViewPost() {
         setLoading(true);
         try {
           const postData = await getSinglePost(parseInt(postID));
-          setData(postData);
+          setData(data);
           setLoading(false);
         } catch (error) {
           console.error("Error fetching post:", error);
