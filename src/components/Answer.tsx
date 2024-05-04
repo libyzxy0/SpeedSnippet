@@ -152,7 +152,7 @@ function Reaction() {
   const { updateAnswer } = useAnswer();
   const { user } = useAuth();
   const [countReaction, setCountReaction] = useState<any>({ awesome: 0, trash: 0 });
-
+  
   useEffect(() => {
     const reactionCounts = reactions.reduce(
       (acc, cur) => {
@@ -166,50 +166,53 @@ function Reaction() {
   }, [reactions, user]);
 
   const handleReaction = async (reaction: string) => {
-  const userIndex = reactions.findIndex((item: any) => item.username === user.username);
+    const existingReactionIndex = reactions.findIndex(
+      (u: { username: string; reaction: string }) => u.username === user.id,
+    );
+    
+    if (existingReactionIndex === -1) {
+      const fields = {
+        reactions: [
+          ...reactions,
+          { username: user.id, reaction: reaction },
+        ],
+      };
 
-  if (userIndex !== -1) {
-    const prevReaction = reactions[userIndex].reaction;
-    setCountReaction((prevCount: any) => ({
-      ...prevCount,
-      [prevReaction]: prevCount[prevReaction] - 1,
-    }));
+      const updatedReactions = [...fields.reactions];
+      
+      const reactionCounts = updatedReactions.reduce(
+      (acc, cur) => {
+        acc[cur.reaction as "awesome" | "trash"]++;
+        return acc;
+      },
+      { awesome: 0, trash: 0 },
+    );
 
-    const newReactions = [...reactions];
-    newReactions.splice(userIndex, 1);
+    setCountReaction(reactionCounts);
+      
+      await updateAnswer(answerID, fields);
+    } else {
+      const updatedReactions = [...reactions];
+      updatedReactions[existingReactionIndex].reaction = reaction;
 
-    try {
-      await updateAnswer(answerID, {
-        reactions: newReactions,
-      });
-    } catch (error) {
-      console.error("Error removing previous reaction:", error);
-      setCountReaction((prevCount: any) => ({
-        ...prevCount,
-        [prevReaction]: prevCount[prevReaction] + 1,
-      }));
+      const fields = {
+        reactions: updatedReactions,
+      };
+      
+      const reactionCounts = updatedReactions.reduce(
+      (acc, cur) => {
+        acc[cur.reaction as "awesome" | "trash"]++;
+        return acc;
+      },
+      { awesome: 0, trash: 0 },
+    );
+
+    setCountReaction(reactionCounts);
+
+      await updateAnswer(answerID, fields);
     }
-  }
-
-  setCountReaction((prevCount: any) => ({
-    ...prevCount,
-    [reaction]: prevCount[reaction] + 1,
-  }));
-
-  try {
-    const newData = [...reactions, { username: user.username, reaction }];
-
-    await updateAnswer(answerID, {
-      reactions: newData,
-    });
-  } catch (error) {
-    console.error("Error adding reaction:", error);
-    setCountReaction((prevCount: any) => ({
-      ...prevCount,
-      [reaction]: prevCount[reaction] - 1,
-    }));
-  }
-};
+    
+  };
 
 
   return (
