@@ -10,7 +10,9 @@ import Signup from "@/pages/Signup";
 
 const Message = () => (
   <header className="relative top-0 w-full bg-sky-400">
-    <p className="py-2 flex items-center justify-center text-sm text-center">Development in progress, there might be imperfections.</p>
+    <p className="py-2 flex items-center justify-center text-sm text-center">
+      Development in progress, there might be imperfections.
+    </p>
   </header>
 );
 
@@ -18,7 +20,7 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <AuthProvider>
-      <Message />
+        <Message />
         <Routes>
           <Route index element={<Explore />} />
           <Route path="login" element={<Login />} />

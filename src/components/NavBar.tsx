@@ -50,14 +50,14 @@ type NavbarSearchProps = {
 function Navbar({ children, className }: NavbarProps) {
   return (
     <>
-    <nav
-      className={cn(
-        "sticky w-full top-0 flex items-center justify-between h-16 border-b border-gray-300 dark:border-gray-800 z-30 backdrop-filter backdrop-blur-md bg-opacity-20",
-        className,
-      )}
-    >
-     {children}
-    </nav>
+      <nav
+        className={cn(
+          "sticky w-full top-0 flex items-center justify-between h-16 border-b border-gray-300 dark:border-gray-800 z-30 backdrop-filter backdrop-blur-md bg-opacity-20",
+          className,
+        )}
+      >
+        {children}
+      </nav>
     </>
   );
 }

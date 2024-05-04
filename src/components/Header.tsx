@@ -6,7 +6,7 @@ import { ModeToggle } from "@/components/theme-toggle";
 export default function Header({
   back,
   className,
-  title
+  title,
 }: {
   back: string;
   className?: string;

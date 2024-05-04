@@ -5,7 +5,6 @@
 > [!IMPORTANT]  
 > This project is now in the beta stage, available at [https://speed-snippet.vercel.app](https://speed-snippet.vercel.app). Yet, it's still under development and subject to change since it's a personal project.
 
-
 Like this project? **Leave a star**! ⭐⭐⭐⭐⭐
 
 ## ⚙️ Getting Started

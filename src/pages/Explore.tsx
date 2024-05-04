@@ -7,7 +7,7 @@ import { getUsername } from "@/lib/helper/username-getter.ts";
 import { sortPost } from "@/lib/helper/sort-post.ts";
 export default function Explore() {
   const { user } = useAuth();
-  const { data: rawPost , loading } = usePost();
+  const { data: rawPost, loading } = usePost();
   const posts = sortPost(rawPost);
   return (
     <>
@@ -36,22 +36,22 @@ export default function Explore() {
           <Navbar.Actions />
         </Navbar>
         <div className="md:flex md:justify-center">
-        <div className="w-full md:w-[60%] md:shadow-lg">
-          {!loading ? (
-            posts.map((post, index) => (
-              <Post post={post} key={index}>
-                <Post.Header />
-                <Post.Caption />
-                <Post.CodeSnippet />
-                <Post.Reaction />
-              </Post>
-            ))
-          ) : (
-            <>
-              <SkeletonLoading />
-            </>
-          )}
-        </div>
+          <div className="w-full md:w-[60%] md:shadow-lg">
+            {!loading ? (
+              posts.map((post, index) => (
+                <Post post={post} key={index}>
+                  <Post.Header />
+                  <Post.Caption />
+                  <Post.CodeSnippet />
+                  <Post.Reaction />
+                </Post>
+              ))
+            ) : (
+              <>
+                <SkeletonLoading />
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

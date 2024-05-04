@@ -24,7 +24,6 @@ interface Post {
   reactions: Reaction[];
 }
 
-
 const usePost = () => {
   const [data, setData] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,10 +43,10 @@ const usePost = () => {
       setLoading(false);
     }
   };
-  
+
   const getSinglePost = async (id?: number): Promise<Post | null> => {
     try {
-      const { data: postData, error }: any  = await supabase
+      const { data: postData, error }: any = await supabase
         .from(table)
         .select("*")
         .eq("id", id)
@@ -66,9 +65,9 @@ const usePost = () => {
       const { error: createError } = await supabase
         .from(table)
         .insert([newRecord]);
-        
+
       if (createError) throw createError;
-      
+
       return true;
     } catch (createError: any) {
       setError(createError.message);
@@ -77,8 +76,11 @@ const usePost = () => {
       setLoading(false);
     }
   };
-  
-  async function updatePost<T>(id: number, updatedFields: Partial<T>): Promise<boolean> {
+
+  async function updatePost<T>(
+    id: number,
+    updatedFields: Partial<T>,
+  ): Promise<boolean> {
     try {
       setLoading(true);
       const { error: updateError } = await supabase
@@ -93,11 +95,9 @@ const usePost = () => {
       setLoading(false);
       return false;
     }
-}
+  }
 
-
-
-const deletePost = async (id: number) => {
+  const deletePost = async (id: number) => {
     try {
       setLoading(true);
       const { error } = await supabase.from(table).delete().eq("id", id);
@@ -110,7 +110,6 @@ const deletePost = async (id: number) => {
       return false;
     }
   };
-  
 
   useEffect(() => {
     fetchData();
@@ -123,7 +122,7 @@ const deletePost = async (id: number) => {
     createPost,
     updatePost,
     deletePost,
-    getSinglePost
+    getSinglePost,
   };
 };
 
