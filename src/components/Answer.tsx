@@ -202,7 +202,7 @@ function Reaction() {
     try {
       const newData = [...reactions.filter((item: any) => item.username !== user.username), { username: user.username, reaction }];
 
-      await updateAnswer(answerID, {
+      await updateAnswer<UpdateType>(answerID, {
         reactions: newData,
       });
     } catch (error) {
@@ -231,10 +231,6 @@ function Reaction() {
     </div>
   );
 }
-
-
-
-
 
 
 AnswerProvider.Content = Content;
