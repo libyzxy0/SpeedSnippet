@@ -27,7 +27,7 @@ interface Answer {
   user: User;
   code: string;
   lang: string;
-  created_at?: string;
+  created_at?: Date;
   reactions: Reaction[];
 }
 
