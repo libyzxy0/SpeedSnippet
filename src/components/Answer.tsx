@@ -47,7 +47,6 @@ const useAnswerContext = () => {
 };
 
 function AnswerProvider({ children, answer, post_user }: AnswerProps) {
-  const { user } = useAuth();
   return (
     <AnswerContext.Provider value={answer}>
       <div className="relative border-s-2 border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none">
