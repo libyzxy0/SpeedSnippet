@@ -150,7 +150,6 @@ function Code() {
 interface UpdateType {
   reactions: Reaction[];
 }
-
 function Reaction() {
   const { reactions, id: answerID } = useAnswerContext();
   const { updateAnswer } = useAnswer();
@@ -161,9 +160,6 @@ function Reaction() {
     const reactionCounts = reactions.reduce(
       (acc, cur) => {
         acc[cur.reaction as "awesome" | "trash"]++;
-        if (cur.username === user.username) {
-          //Using this in tye future
-        }
         return acc;
       },
       { awesome: 0, trash: 0 },
@@ -173,51 +169,50 @@ function Reaction() {
   }, [reactions, user]);
 
   const handleReaction = async (reaction: string) => {
-  const userIndex = reactions.findIndex((item: any) => item.username === user.username);
+    const userIndex = reactions.findIndex((item: any) => item.username === user.username);
 
-  if (userIndex !== -1) {
-    const newReactions = [...reactions];
-    const prevReaction = newReactions[userIndex].reaction;
-    newReactions.splice(userIndex, 1);
+    if (userIndex !== -1) {
+      const newReactions = [...reactions];
+      const prevReaction = newReactions[userIndex].reaction;
+      newReactions.splice(userIndex, 1);
+
+      setCountReaction((prevCount: any) => ({
+        ...prevCount,
+        [prevReaction]: prevCount[prevReaction] - 1,
+      }));
+
+      try {
+        await updateAnswer(answerID, {
+          reactions: newReactions,
+        });
+      } catch (error) {
+        console.error("Error removing previous reaction:", error);
+        setCountReaction((prevCount: any) => ({
+          ...prevCount,
+          [prevReaction]: prevCount[prevReaction] + 1,
+        }));
+      }
+    }
 
     setCountReaction((prevCount: any) => ({
       ...prevCount,
-      [prevReaction]: prevCount[prevReaction] - 1,
+      [reaction]: prevCount[reaction] + 1,
     }));
 
     try {
-      await updateAnswer<UpdateType>(answerID, {
-        reactions: newReactions,
+      const newData = [...reactions.filter((item: any) => item.username !== user.username), { username: user.username, reaction }];
+
+      await updateAnswer(answerID, {
+        reactions: newData,
       });
     } catch (error) {
-      console.error("Error removing previous reaction:", error);
+      console.error("Error adding reaction:", error);
       setCountReaction((prevCount: any) => ({
         ...prevCount,
-        [prevReaction]: prevCount[prevReaction] + 1,
+        [reaction]: prevCount[reaction] - 1,
       }));
     }
-  }
-
-  setCountReaction((prevCount: any) => ({
-    ...prevCount,
-    [reaction]: prevCount[reaction] + 1,
-  }));
-
-  try {
-    const newData = [...reactions.filter((item: any) => item.username !== user.username), { username: user.username, reaction }];
-
-    await updateAnswer<UpdateType>(answerID, {
-      reactions: newData,
-    });
-  } catch (error) {
-    console.error("Error adding reaction:", error);
-    setCountReaction((prevCount: any) => ({
-      ...prevCount,
-      [reaction]: prevCount[reaction] - 1,
-    }));
-  }
-};
-
+  };
 
   return (
     <div className="mt-5 flex flex-row">
@@ -236,6 +231,7 @@ function Reaction() {
     </div>
   );
 }
+
 
 
 
