@@ -198,8 +198,6 @@ function Reaction() {
     }
   }
 
-  setUserReaction(reaction);
-
   setCountReaction((prevCount: any) => ({
     ...prevCount,
     [reaction]: prevCount[reaction] + 1,
