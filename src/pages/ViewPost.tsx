@@ -151,7 +151,7 @@ export default function ViewPost() {
               <h1 className="text-xl dark:text-white text-gray-700 font-medium mx-5 mt-5">
                 Answers on {data && data.user.username}'s post
               </h1>
-              {loading && answers &&
+              {!loading && answers &&
                 answers.map((answer, index) => (
                   <Answer post_user={data && data.user.username} answer={answer} key={index}>
                     <Answer.Content />
