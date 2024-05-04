@@ -336,11 +336,11 @@ function Reaction() {
     if (!user_id) {
       return;
     }
+
+    // Optimistically update UI state
     setcReaction(reaction);
 
-    if (!data) return;
-
-    if (!post) return;
+    if (!data || !post) return;
 
     const existingReactionIndex = post.reactions.findIndex(
       (u: { username: string; reaction: string }) => u.username === user_id,
@@ -353,17 +353,20 @@ function Reaction() {
           { username: user_id, reaction: reaction },
         ],
       };
-      post?.handleChangeReaction && post.handleChangeReaction(post.reactions);
+
+      const updatedReactions = [...fields.reactions];
+      post?.handleChangeReaction && post.handleChangeReaction(updatedReactions);
+
       await updatePost<UpdateType>(postID, fields);
     } else {
-      // If User has already reacted, update existing reaction
       const updatedReactions = [...post.reactions];
       updatedReactions[existingReactionIndex].reaction = reaction;
 
       const fields = {
         reactions: updatedReactions,
       };
-      post?.handleChangeReaction && post.handleChangeReaction(post.reactions);
+
+      post?.handleChangeReaction && post.handleChangeReaction(updatedReactions);
       await updatePost<UpdateType>(postID, fields);
     }
   };

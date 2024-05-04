@@ -151,88 +151,96 @@ export default function ViewPost() {
               <h1 className="text-xl dark:text-white text-gray-700 font-medium mx-5 mt-5">
                 Answers on {data && data.user.username}'s post
               </h1>
-              {!loading && answers &&
+              {!loading &&
+                answers &&
                 answers.map((answer, index) => (
-                  <Answer post_user={data && data.user.username} answer={answer} key={index}>
+                  <Answer
+                    post_user={data && data.user.username}
+                    answer={answer}
+                    key={index}
+                  >
                     <Answer.Content />
                     <Answer.Code />
                     <Answer.Reaction />
                   </Answer>
                 ))}
-                {!loading && user && (
-              <Popover>
-                <PopoverTrigger className="w-full text-start">
-                  <div className="relative border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none pb-14">
-                    <li className="mb-5 ms-8">
-                      <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-                        <Avatar className="border-2 border-gray-300 dark:border-gray-700">
-                          <AvatarImage src={user?.user_metadata.avatar_url} alt={"D"} />
-                          <AvatarFallback>
-                            {getUsername(user).slice(0, 1).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                      </span>
-                      <div className="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-900 dark:border-gray-800">
-                        <h1 className="text-md text-gray-400 dark:text-white">
-                          Write a answer...
-                        </h1>
-                      </div>
-                    </li>
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <h1 className="text-gray-700 text-lg font-medium dark:text-white">
-                    Answer {data && data.user.username} post
-                  </h1>
-                  <Textarea
-                    value={typedAnswer}
-                    onChange={(e) => setTypedAnwser(e.target.value)}
-                    placeholder="Lorem Ipsum dolor sit amet in den."
-                    className="resize-none border-[1.7px] border-gray-300 dark:border-gray-600 focus:border-gray-700 dark:focus:border-white focus-visible:ring-0 mt-5"
-                    rows={5}
-                  />
-                  <CodeEditor
-                    value={code}
-                    language="js"
-                    className={`text-[15px] border-[1.7px] border-gray-300 dark:border-gray-700 rounded-sm ${theme === "dark" ? "bg-gray-950" : "codebg-white"} mt-5`}
-                    placeholder="Code here. (optional)"
-                    onChange={(evn) => setCode(evn.target.value)}
-                    padding={15}
-                    data-color-mode={theme == "dark" ? "dark" : "light"}
-                  />
-                  {code && (
-                    <Select
-                      value={lang}
-                      onValueChange={(value) => setLang(value)}
-                    >
-                      <SelectTrigger className="w-full mt-2">
-                        <SelectValue placeholder="Language" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="js">JavaScript</SelectItem>
-                        <SelectItem value="cpp">C++</SelectItem>
-                        <SelectItem value="py">Python</SelectItem>
-                        <SelectItem value="java">Java</SelectItem>
-                        <SelectItem value="csharp">C#</SelectItem>
-                        <SelectItem value="swift">Swift</SelectItem>
-                        <SelectItem value="go">Go</SelectItem>
-                        <SelectItem value="rb">Ruby</SelectItem>
-                        <SelectItem value="php">PHP</SelectItem>
-                        <SelectItem value="rs">Rust</SelectItem>
-                        <SelectItem value="kt">Kotlin</SelectItem>
-                        <SelectItem value="ts">TypeScript</SelectItem>
-                        <SelectItem value="html">HTML</SelectItem>
-                        <SelectItem value="css">CSS</SelectItem>
-                        <SelectItem value="sql">SQL</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                  <Button onClick={handleSubmitAnswer} className="py-5 mt-3">
-                    Submit Answer
-                  </Button>
-                </PopoverContent>
-              </Popover>
-             )}
+              {!loading && user && (
+                <Popover>
+                  <PopoverTrigger className="w-full text-start">
+                    <div className="relative border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none pb-14">
+                      <li className="mb-5 ms-8">
+                        <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                          <Avatar className="border-2 border-gray-300 dark:border-gray-700">
+                            <AvatarImage
+                              src={user?.user_metadata.avatar_url}
+                              alt={"D"}
+                            />
+                            <AvatarFallback>
+                              {getUsername(user).slice(0, 1).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                        </span>
+                        <div className="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-900 dark:border-gray-800">
+                          <h1 className="text-md text-gray-400 dark:text-white">
+                            Write a answer...
+                          </h1>
+                        </div>
+                      </li>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <h1 className="text-gray-700 text-lg font-medium dark:text-white">
+                      Answer {data && data.user.username} post
+                    </h1>
+                    <Textarea
+                      value={typedAnswer}
+                      onChange={(e) => setTypedAnwser(e.target.value)}
+                      placeholder="Lorem Ipsum dolor sit amet in den."
+                      className="resize-none border-[1.7px] border-gray-300 dark:border-gray-600 focus:border-gray-700 dark:focus:border-white focus-visible:ring-0 mt-5"
+                      rows={5}
+                    />
+                    <CodeEditor
+                      value={code}
+                      language="js"
+                      className={`text-[15px] border-[1.7px] border-gray-300 dark:border-gray-700 rounded-sm ${theme === "dark" ? "bg-gray-950" : "codebg-white"} mt-5`}
+                      placeholder="Code here. (optional)"
+                      onChange={(evn) => setCode(evn.target.value)}
+                      padding={15}
+                      data-color-mode={theme == "dark" ? "dark" : "light"}
+                    />
+                    {code && (
+                      <Select
+                        value={lang}
+                        onValueChange={(value) => setLang(value)}
+                      >
+                        <SelectTrigger className="w-full mt-2">
+                          <SelectValue placeholder="Language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="js">JavaScript</SelectItem>
+                          <SelectItem value="cpp">C++</SelectItem>
+                          <SelectItem value="py">Python</SelectItem>
+                          <SelectItem value="java">Java</SelectItem>
+                          <SelectItem value="csharp">C#</SelectItem>
+                          <SelectItem value="swift">Swift</SelectItem>
+                          <SelectItem value="go">Go</SelectItem>
+                          <SelectItem value="rb">Ruby</SelectItem>
+                          <SelectItem value="php">PHP</SelectItem>
+                          <SelectItem value="rs">Rust</SelectItem>
+                          <SelectItem value="kt">Kotlin</SelectItem>
+                          <SelectItem value="ts">TypeScript</SelectItem>
+                          <SelectItem value="html">HTML</SelectItem>
+                          <SelectItem value="css">CSS</SelectItem>
+                          <SelectItem value="sql">SQL</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                    <Button onClick={handleSubmitAnswer} className="py-5 mt-3">
+                      Submit Answer
+                    </Button>
+                  </PopoverContent>
+                </Popover>
+              )}
             </div>
           ) : (
             <SkeletonLoading />

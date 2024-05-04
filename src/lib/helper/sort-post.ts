@@ -17,38 +17,16 @@ interface Post {
   user: User;
   user_id: string;
   reactions: Reaction[];
+  created_at: any;
 }
 
 export function sortPost(posts: Post[]): Post[] {
   if (posts && posts.length > 0) {
-    return posts.sort((a: Post, b: Post) => {
-      const reactionsA = a.reactions
-        ? a.reactions.filter(
-            (reaction: Reaction) => reaction.reaction === "awesome",
-          ).length
-        : 0;
-      const reactionsB = b.reactions
-        ? b.reactions.filter(
-            (reaction: Reaction) => reaction.reaction === "awesome",
-          ).length
-        : 0;
-
-      if (reactionsA !== reactionsB) {
-        return reactionsB - reactionsA;
-      } else {
-        const trashA = a.reactions
-          ? a.reactions.filter(
-              (reaction: Reaction) => reaction.reaction === "trash",
-            ).length
-          : 0;
-        const trashB = b.reactions
-          ? b.reactions.filter(
-              (reaction: Reaction) => reaction.reaction === "trash",
-            ).length
-          : 0;
-        return trashA - trashB;
-      }
-    });
+    const sorted = posts.sort(
+      (a: Post, b: Post) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    );
+    return sorted;
   } else {
     return [];
   }

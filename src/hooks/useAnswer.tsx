@@ -37,8 +37,24 @@ const useAnswer = () => {
         .select("*")
         .eq("post_id", id);
       if (error) throw error;
-      setData(postData || []);
-      setLoading(false);
+
+      if (postData) {
+        const sorted = postData.sort((a: Answer, b: Answer) => {
+          const reactionsA = Array.isArray(a.reactions) ? a.reactions : [];
+          const reactionsB = Array.isArray(b.reactions) ? b.reactions : [];
+
+          const countA = reactionsA.filter(
+            (reaction: Reaction) => reaction.reaction === "awesome",
+          ).length;
+          const countB = reactionsB.filter(
+            (reaction: Reaction) => reaction.reaction === "awesome",
+          ).length;
+
+          return countB - countA;
+        });
+        setData(sorted || []);
+        setLoading(false);
+      }
     } catch (error: any) {
       setError(error.message);
       setLoading(false);
@@ -63,11 +79,32 @@ const useAnswer = () => {
     }
   };
 
+  async function updateAnswer<T>(
+    id: number,
+    updatedFields: Partial<T>,
+  ): Promise<boolean> {
+    try {
+      setLoading(true);
+      const { error: updateError } = await supabase
+        .from(table)
+        .update(updatedFields)
+        .eq("id", id);
+      if (updateError) throw updateError;
+      setLoading(false);
+      return true;
+    } catch (updateError: any) {
+      setError((updateError as Error).message);
+      setLoading(false);
+      return false;
+    }
+  }
+
   return {
     getAnswer,
     data,
     loading,
     error,
+    updateAnswer,
     createAnswer,
   };
 };
