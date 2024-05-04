@@ -162,7 +162,7 @@ function Reaction() {
       (acc, cur) => {
         acc[cur.reaction as "awesome" | "trash"]++;
         if (cur.username === user.username) {
-          setUserReaction(cur.reaction);
+          //Using this in tye future
         }
         return acc;
       },
