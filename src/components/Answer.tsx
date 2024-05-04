@@ -150,23 +150,19 @@ function Code() {
 interface UpdateType {
   reactions: Reaction[];
 }
-
 function Reaction() {
   const { reactions, id: answerID } = useAnswerContext();
   const { updateAnswer } = useAnswer();
   const { user } = useAuth();
-  const [userReaction, setUserReaction] = useState("");
-  const [countReaction, setCountReaction] = useState<{
-    awesome: number;
-    trash: number;
-  }>({ awesome: 0, trash: 0 });
+  const [userReaction, setUserReaction] = useState<"awesome" | "trash">("");
+  const [countReaction, setCountReaction] = useState<{ awesome: number; trash: number }>({ awesome: 0, trash: 0 });
 
   useEffect(() => {
     const reactionCounts = reactions.reduce(
       (acc, cur) => {
         acc[cur.reaction]++;
         if (cur.username === user.username) {
-          setUserReaction(cur.reaction);
+          setUserReaction(cur.reaction as "awesome" | "trash"); 
         }
         return acc;
       },
@@ -176,7 +172,7 @@ function Reaction() {
     setCountReaction(reactionCounts);
   }, [reactions, user]);
 
-  const handleReaction = async (reaction: string) => {
+  const handleReaction = async (reaction: "awesome" | "trash") => {
     if (userReaction === reaction) {
       return;
     }
@@ -193,7 +189,7 @@ function Reaction() {
       const newData = reactions.filter(
         (item) => item.username !== user.username,
       );
-      newData.push({ username: user.username, reaction: reaction });
+      newData.push({ username: user.username, reaction });
 
       await updateAnswer<UpdateType>(answerID, {
         reactions: newData,
@@ -225,6 +221,7 @@ function Reaction() {
     </div>
   );
 }
+
 
 AnswerProvider.Content = Content;
 AnswerProvider.Code = Code;

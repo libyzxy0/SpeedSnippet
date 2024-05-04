@@ -17,7 +17,7 @@ interface Post {
   user: User;
   user_id: string;
   reactions: Reaction[];
-  created_at: any;
+  created_at?: any;
 }
 
 export function sortPost(posts: Post[]): Post[] {

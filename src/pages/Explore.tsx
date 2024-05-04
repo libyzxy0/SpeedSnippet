@@ -9,6 +9,7 @@ export default function Explore() {
   const { user } = useAuth();
   const { data: rawPost, loading } = usePost();
   const posts = sortPost(rawPost);
+  
   return (
     <>
       <div className="h-full w-full bg-white dark:bg-gray-950">
