@@ -149,19 +149,21 @@ function Code() {
 
 interface UpdateType {
   reactions: Reaction[];
-}function Reaction() {
+}
+
+function Reaction() {
   const { reactions, id: answerID } = useAnswerContext();
   const { updateAnswer } = useAnswer();
   const { user } = useAuth();
-  const [userReaction, setUserReaction] = useState<"awesome" | "trash" | null>(null); // Initialize with null
-  const [countReaction, setCountReaction] = useState<{ awesome: number; trash: number }>({ awesome: 0, trash: 0 });
+  const [userReaction, setUserReaction] = useState<any>("");
+  const [countReaction, setCountReaction] = useState<any>({ awesome: 0, trash: 0 });
 
   useEffect(() => {
     const reactionCounts = reactions.reduce(
       (acc, cur) => {
         acc[cur.reaction]++;
         if (cur.username === user.username) {
-          setUserReaction(cur.reaction as "awesome" | "trash");
+          setUserReaction(cur.reaction);
         }
         return acc;
       },
@@ -171,34 +173,34 @@ interface UpdateType {
     setCountReaction(reactionCounts);
   }, [reactions, user]);
 
-  const handleReaction = async (reaction: "awesome" | "trash") => {
+  const handleReaction = async (reaction: string) => {
     if (userReaction === reaction) {
       return;
     }
 
     setUserReaction(reaction);
 
-    setCountReaction((prevCount) => ({
+    setCountReaction((prevCount: any) => ({
       ...prevCount,
       [reaction]: prevCount[reaction] + 1,
-      [userReaction as string]: prevCount[userReaction as string] - 1, // Type assertion
+      [userReaction]: prevCount[userReaction] - 1,
     }));
 
     try {
       const newData = reactions.filter(
-        (item) => item.username !== user.username,
+        (item: any) => item.username !== user.username,
       );
       newData.push({ username: user.username, reaction });
 
-      await updateAnswer<UpdateType>(answerID, {
+      await updateAnswer<any>(answerID, {
         reactions: newData,
       });
     } catch (error) {
       console.error("Error adding reaction:", error);
-      setCountReaction((prevCount) => ({
+      setCountReaction((prevCount: any) => ({
         ...prevCount,
         [reaction]: prevCount[reaction] - 1,
-        [userReaction as string]: prevCount[userReaction as string] + 1, // Type assertion
+        [userReaction]: prevCount[userReaction] + 1,
       }));
     }
   };
@@ -220,6 +222,7 @@ interface UpdateType {
     </div>
   );
 }
+
 
 
 
