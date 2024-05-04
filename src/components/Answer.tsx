@@ -147,9 +147,6 @@ function Code() {
   );
 }
 
-interface UpdateType {
-  reactions: Reaction[];
-}
 function Reaction() {
   const { reactions, id: answerID } = useAnswerContext();
   const { updateAnswer } = useAnswer();
