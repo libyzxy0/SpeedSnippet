@@ -30,8 +30,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 
 interface User {
-  username: string;
+  displayName: string;
   avatar: string;
+  user_id: number;
 }
 
 interface Reaction {
@@ -65,7 +66,7 @@ export default function ViewPost() {
   const { data: answers, getAnswer, createAnswer } = useAnswer();
 
   const handleSubmitAnswer = () => {
-    if (typedAnswer) {
+    if (typedAnswer && data) {
       createAnswer({
         id: Math.floor(Math.random() * 100000000),
         post_id: data.id,
@@ -86,7 +87,9 @@ export default function ViewPost() {
       setTypedAnwser("");
       setCode("");
       setLang("");
-      getAnswer(data.id);
+      if(data) {
+        getAnswer(data.id);
+      }
     } else {
       toast({
         title: "Failed to submit answer",

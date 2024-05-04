@@ -45,7 +45,7 @@ const useAnswerContext = () => {
   return context;
 };
 
-function AnswerProvider({ children, answer }): AnswerProps {
+function AnswerProvider({ children, answer }: AnswerProps) {
   return (
     <AnswerContext.Provider value={answer}>
       <div className="relative border-s-2 border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none">
