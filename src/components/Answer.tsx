@@ -7,6 +7,7 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { useTheme } from "@/components/theme-provider";
 import { Icon } from "@iconify/react";
 import React, { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Reaction {
   username: string;
@@ -47,9 +48,11 @@ const useAnswerContext = () => {
 };
 
 function AnswerProvider({ children, answer, post_user }: AnswerProps) {
+  const { user } = useAuth();
+  console.log("Answer:", answer)
   return (
     <AnswerContext.Provider value={answer}>
-      <div className="relative border-s-2 border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none">
+      <div className={`relative border-s-2 ${user ? "" : "last:border-none last:pb-14" } border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none`}>
         <li className="mb-5 ms-8">
           <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
             <Avatar className="border-2 border-gray-300 dark:border-gray-700">
@@ -66,7 +69,7 @@ function AnswerProvider({ children, answer, post_user }: AnswerProps) {
             </h1>
             <div className="flex flex-row justify-between">
               <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
-                10:00AM
+                {new Intl.DateTimeFormat('en-US', {month:'short', day:'2-digit', year:'numeric', hour:'numeric', minute:'2-digit', hour12:true}).format(new Date(answer.created_at))}
               </div>
               {/*  
             <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 mt-2">Best Answer</span>

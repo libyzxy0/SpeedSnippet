@@ -159,6 +159,7 @@ export default function ViewPost() {
                     <Answer.Reaction />
                   </Answer>
                 ))}
+                {!loading && user && (
               <Popover>
                 <PopoverTrigger className="w-full text-start">
                   <div className="relative border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none pb-14">
@@ -231,6 +232,7 @@ export default function ViewPost() {
                   </Button>
                 </PopoverContent>
               </Popover>
+             )}
             </div>
           ) : (
             <SkeletonLoading />
