@@ -155,7 +155,6 @@ function Reaction() {
   const { reactions, id: answerID } = useAnswerContext();
   const { updateAnswer } = useAnswer();
   const { user } = useAuth();
-  const [userReaction, setUserReaction] = useState<any>("");
   const [countReaction, setCountReaction] = useState<any>({ awesome: 0, trash: 0 });
 
   useEffect(() => {
