@@ -65,7 +65,7 @@ function AnswerProvider({ children, answer, post_user }: AnswerProps) {
           </span>
           <div className="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-900 dark:border-gray-800 md:flex md:flex-col md:items-start">
             <h1 className="text-md text-gray-700 dark:text-white">
-              <b className="font-medium">{getUsername(user)}</b> answered to{" "}
+              <b className="font-medium">{answer.user.displayName}</b> answered to{" "}
               <b className="font-medium">{post_user}'s</b> post
             </h1>
             <div className="flex flex-row justify-between">

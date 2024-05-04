@@ -86,9 +86,7 @@ export default function ViewPost() {
       setTypedAnwser("");
       setCode("");
       setLang("");
-      if(data) {
-        getAnswer(data.id);
-      }
+      data && getAnswer(data.id);
     } else {
       toast({
         title: "Failed to submit answer",
