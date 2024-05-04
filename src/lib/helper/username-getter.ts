@@ -1,5 +1,5 @@
 export function getUsername(user: any): string {
-  const provider = user.app_metadata.provider;
+  const provider = user?.app_metadata.provider;
   let username = "";
   switch (provider) {
     case "email":
