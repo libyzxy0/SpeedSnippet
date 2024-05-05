@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import { useParams } from "react-router-dom";
 import { usePost } from "@/hooks/usePost";
 import { useAnswer } from "@/hooks/useAnswer";
+import { Icon } from "@iconify/react";
 import { getUsername } from "@/lib/helper/username-getter.ts";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
@@ -58,6 +59,7 @@ export default function ViewPost() {
   const [data, setData] = useState<PostData | null>(null);
   const [typedAnswer, setTypedAnwser] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
 
   const [code, setCode] = useState("");
   const [lang, setLang] = useState("");
@@ -86,7 +88,9 @@ export default function ViewPost() {
       setTypedAnwser("");
       setCode("");
       setLang("");
-      data && getAnswer(data.id);
+      getAnswer(data.id);
+      getSinglePost(data.id)
+      setPopoverOpen(false);
     } else {
       toast({
         title: "Failed to submit answer",
@@ -165,9 +169,9 @@ export default function ViewPost() {
                   </Answer>
                 ))}
               {!loading && user && (
-                <Popover>
+                <Popover open={popoverOpen}>
                   <PopoverTrigger className="w-full text-start">
-                    <div className="relative border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none pb-14">
+                    <div onClick={() => setPopoverOpen(true)} className="relative border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none pb-14">
                       <li className="mb-5 ms-8">
                         <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
                           <Avatar className="border-2 border-gray-300 dark:border-gray-700">
@@ -189,9 +193,14 @@ export default function ViewPost() {
                     </div>
                   </PopoverTrigger>
                   <PopoverContent>
-                    <h1 className="text-gray-700 text-lg font-medium dark:text-white">
+                  <div className="flex flex-row justify-between">
+                 <h1 className="text-gray-700 text-lg font-medium dark:text-white">
                       Answer {data && data.user.username} post
                     </h1>
+                    <button className="bg-transparent border-none text-xl" onClick={() => setPopoverOpen(false)}>
+                    <Icon icon="ic:round-close" />
+                    </button>
+                 </div>
                     <Textarea
                       value={typedAnswer}
                       onChange={(e) => setTypedAnwser(e.target.value)}

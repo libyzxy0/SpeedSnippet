@@ -38,7 +38,6 @@ const useAnswer = () => {
         .eq("post_id", id);
       if (error) throw error;
 
-      if (postData) {
         const sorted = postData.sort((a: Answer, b: Answer) => {
           const reactionsA = Array.isArray(a.reactions) ? a.reactions : [];
           const reactionsB = Array.isArray(b.reactions) ? b.reactions : [];
@@ -52,9 +51,9 @@ const useAnswer = () => {
 
           return countB - countA;
         });
+        
         setData(sorted || []);
         setLoading(false);
-      }
     } catch (error: any) {
       setError(error.message);
       setLoading(false);
