@@ -1,6 +1,5 @@
 # ⚡SpeedSnippet [![Static Badge](https://img.shields.io/badge/by-libyzxy0-brightgreen?style=flat&logo=github&color=%2322d3ee)](https://libyzxy0.com)
 
-
 **SpeedSnippet** is a platform where you can share your code snippets, or ask questions to help other developers.
 
 [![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
@@ -27,6 +26,7 @@ To run this project open your terminal and run
 ![Alt](https://repobeats.axiom.co/api/embed/3d19be24c0d5efeba949257cf2e915a12ab8c00f.svg "Repobeats analytics image")
 
 ## 👷‍♂️Contributing
+
 Contributions are welcome! If you'd like to contribute to SpeedSnippet, please follow these steps:
 
 1. Fork the repository and create a new branch.

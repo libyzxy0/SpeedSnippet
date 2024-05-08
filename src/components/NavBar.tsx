@@ -45,6 +45,7 @@ type NavbarAvatarProps = {
 };
 type NavbarSearchProps = {
   search?: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
 };
 
 function Navbar({ children, className }: NavbarProps) {
@@ -79,6 +80,10 @@ function NavbarAvatar({
 }: NavbarAvatarProps) {
   const { logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const handleLogout = async () => {
+    await logout();
+    setOpen(false);
+  };
   return (
     <>
       <DropdownMenu>
@@ -130,14 +135,7 @@ function NavbarAvatar({
             <AlertDialogCancel onClick={() => setOpen(false)}>
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                logout();
-                setTimeout(() => setOpen(false), 2000);
-              }}
-            >
-              Logout
-            </AlertDialogAction>
+            <AlertDialogAction onClick={handleLogout}>Logout</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -145,13 +143,14 @@ function NavbarAvatar({
   );
 }
 
-function NavbarSearch({ search }: NavbarSearchProps) {
+function NavbarSearch({ search, onChange }: NavbarSearchProps) {
   return (
     <div className="mx-4 w-auto">
       <Input
-        className="border border-gray-300 h-9 rounded-lg dark:border-gray-800"
+        className="focus-visible:ring-sky-400"
         type="search"
         placeholder="Search"
+        onChange={onChange}
         value={search}
       />
     </div>

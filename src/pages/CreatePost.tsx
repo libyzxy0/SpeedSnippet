@@ -67,53 +67,53 @@ export default function CreatePost() {
       setUploading(true);
 
       // const check = await checkContent(
-//         `Title:${title}:Description:${description}:Code:${code}`,
-//       );
-//       
-//       console.log("Check:", check);
+      //         `Title:${title}:Description:${description}:Code:${code}`,
+      //       );
+      //
+      //       console.log("Check:", check);
       // if (check) {
-//         if (check.isHarmful) {
-          // toast({
-//             title: "Failed to post!",
-//             description: check.reason,
-//           });
-//           setUploading(false);
-//         } else {
-          const data: Post = {
-            id: Math.floor(Math.random() * 100000000),
-            user_id: user.id,
-            user: {
-              avatar: user.user_metadata.avatar_url,
-              username: getUsername(user),
-            },
-            title,
-            description,
-            lang,
-            code,
-            reactions: [],
-          };
-          await createPost(data);
-          toast({
-            title: error ? "Error" : "Success",
-            description: error
-              ? "Failed to post snippet"
-              : "Snippet is posted! Redirecting you to feed in 3 seconds.",
-          });
-          setUploading(false);
-          setTitle("");
-          setCode("");
-          setLang("");
-          setDescription("");
-          setTimeout(() => {
-            navigate("/");
-          }, 3000);
-//           }
+      //         if (check.isHarmful) {
+      // toast({
+      //             title: "Failed to post!",
+      //             description: check.reason,
+      //           });
+      //           setUploading(false);
+      //         } else {
+      const data: Post = {
+        id: Math.floor(Math.random() * 100000000),
+        user_id: user.id,
+        user: {
+          avatar: user.user_metadata.avatar_url,
+          username: getUsername(user),
+        },
+        title,
+        description,
+        lang,
+        code,
+        reactions: [],
+      };
+      await createPost(data);
+      toast({
+        title: error ? "Error" : "Success",
+        description: error
+          ? "Failed to post snippet"
+          : "Snippet is posted! Redirecting you to feed in 3 seconds.",
+      });
+      setUploading(false);
+      setTitle("");
+      setCode("");
+      setLang("");
+      setDescription("");
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+      //           }
       // } else {
-//         toast({
-//           title: "Error",
-//           description: "Failed to post, server error!",
-//         });
-//       }
+      //         toast({
+      //           title: "Error",
+      //           description: "Failed to post, server error!",
+      //         });
+      //       }
     } catch (err: unknown) {
       setUploading(false);
       console.log(err);

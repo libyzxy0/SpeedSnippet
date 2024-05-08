@@ -50,7 +50,9 @@ const useAnswerContext = () => {
 
 function AnswerProvider({ children, answer, post_user }: AnswerProps) {
   const { user } = useAuth();
-  const totalAwesome = answer.reactions.filter((reaction: Reaction) => reaction.reaction === "awesome").length;
+  const totalAwesome = answer.reactions.filter(
+    (reaction: Reaction) => reaction.reaction === "awesome",
+  ).length;
   return (
     <AnswerContext.Provider value={answer}>
       <div
@@ -83,8 +85,10 @@ function AnswerProvider({ children, answer, post_user }: AnswerProps) {
                   }).format(new Date(answer.created_at))}
               </div>
               {totalAwesome >= 5 && (
-               <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 mt-2">Best Answer</span>
-               )}
+                <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300 mt-2">
+                  Best Answer
+                </span>
+              )}
             </div>
             {children}
           </div>
@@ -151,8 +155,11 @@ function Reaction() {
   const { reactions, id: answerID } = useAnswerContext();
   const { updateAnswer } = useAnswer();
   const { user } = useAuth();
-  const [countReaction, setCountReaction] = useState<any>({ awesome: 0, trash: 0 });
-  
+  const [countReaction, setCountReaction] = useState<any>({
+    awesome: 0,
+    trash: 0,
+  });
+
   useEffect(() => {
     const reactionCounts = reactions.reduce(
       (acc, cur) => {
@@ -169,27 +176,24 @@ function Reaction() {
     const existingReactionIndex = reactions.findIndex(
       (u: { username: string; reaction: string }) => u.username === user.id,
     );
-    
+
     if (existingReactionIndex === -1) {
       const fields = {
-        reactions: [
-          ...reactions,
-          { username: user.id, reaction: reaction },
-        ],
+        reactions: [...reactions, { username: user.id, reaction: reaction }],
       };
 
       const updatedReactions = [...fields.reactions];
-      
-      const reactionCounts = updatedReactions.reduce(
-      (acc, cur) => {
-        acc[cur.reaction as "awesome" | "trash"]++;
-        return acc;
-      },
-      { awesome: 0, trash: 0 },
-    );
 
-    setCountReaction(reactionCounts);
-      
+      const reactionCounts = updatedReactions.reduce(
+        (acc, cur) => {
+          acc[cur.reaction as "awesome" | "trash"]++;
+          return acc;
+        },
+        { awesome: 0, trash: 0 },
+      );
+
+      setCountReaction(reactionCounts);
+
       await updateAnswer(answerID, fields);
     } else {
       const updatedReactions = [...reactions];
@@ -198,22 +202,20 @@ function Reaction() {
       const fields = {
         reactions: updatedReactions,
       };
-      
-      const reactionCounts = updatedReactions.reduce(
-      (acc, cur) => {
-        acc[cur.reaction as "awesome" | "trash"]++;
-        return acc;
-      },
-      { awesome: 0, trash: 0 },
-    );
 
-    setCountReaction(reactionCounts);
+      const reactionCounts = updatedReactions.reduce(
+        (acc, cur) => {
+          acc[cur.reaction as "awesome" | "trash"]++;
+          return acc;
+        },
+        { awesome: 0, trash: 0 },
+      );
+
+      setCountReaction(reactionCounts);
 
       await updateAnswer(answerID, fields);
     }
-    
   };
-
 
   return (
     <div className="mt-5 flex flex-row">
@@ -232,7 +234,6 @@ function Reaction() {
     </div>
   );
 }
-
 
 AnswerProvider.Content = Content;
 AnswerProvider.Code = Code;

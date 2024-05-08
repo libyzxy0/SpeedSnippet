@@ -38,22 +38,22 @@ const useAnswer = () => {
         .eq("post_id", id);
       if (error) throw error;
 
-        const sorted = postData.sort((a: Answer, b: Answer) => {
-          const reactionsA = Array.isArray(a.reactions) ? a.reactions : [];
-          const reactionsB = Array.isArray(b.reactions) ? b.reactions : [];
+      const sorted = postData.sort((a: Answer, b: Answer) => {
+        const reactionsA = Array.isArray(a.reactions) ? a.reactions : [];
+        const reactionsB = Array.isArray(b.reactions) ? b.reactions : [];
 
-          const countA = reactionsA.filter(
-            (reaction: Reaction) => reaction.reaction === "awesome",
-          ).length;
-          const countB = reactionsB.filter(
-            (reaction: Reaction) => reaction.reaction === "awesome",
-          ).length;
+        const countA = reactionsA.filter(
+          (reaction: Reaction) => reaction.reaction === "awesome",
+        ).length;
+        const countB = reactionsB.filter(
+          (reaction: Reaction) => reaction.reaction === "awesome",
+        ).length;
 
-          return countB - countA;
-        });
-        
-        setData(sorted || []);
-        setLoading(false);
+        return countB - countA;
+      });
+
+      setData(sorted || []);
+      setLoading(false);
     } catch (error: any) {
       setError(error.message);
       setLoading(false);

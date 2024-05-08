@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import {
   Form,
   FormControl,
@@ -22,7 +23,7 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   username: z.string().min(1, {
-    message: "Username isn't valid.",
+    message: "Please enter a valid email.",
   }),
   password: z.string().min(1, {
     message: "Please enter your password.",
@@ -80,6 +81,10 @@ export default function Login() {
 
   return (
     <>
+      <Helmet>
+        <title>Sign in | SpeedSnippet</title>
+        <meta name="description" content="Sign in speedsnippet." />
+      </Helmet>
       <div className="h-screen bg-white dark:bg-gray-950 w-full md:flex md:items-center md:flex-col">
         <header className="pt-14 mx-5">
           <h1 className="text-gray-700 dark:text-white font-bold text-3xl">

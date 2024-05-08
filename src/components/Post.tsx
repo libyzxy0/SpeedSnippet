@@ -273,6 +273,7 @@ function CodeSnippet() {
       }
     }
   };
+
   return (
     <div className="px-4 pt-4 flex flex-col">
       <div className="bg-gray-200 dark:bg-gray-800 h-9 rounded-tl-md rounded-tr-md flex items-center flex-row justify-between">

@@ -83,14 +83,14 @@ export default function ViewPost() {
       });
       toast({
         title: "Answer submitted",
-        description: "Thanks for submitting your answers!",
+        description: "Thanks for submitting your answer!",
       });
       setTypedAnwser("");
       setCode("");
       setLang("");
-      getAnswer(data.id);
-      getSinglePost(data.id)
       setPopoverOpen(false);
+      postID && getAnswer(postID);
+      postID && getSinglePost(postID);
     } else {
       toast({
         title: "Failed to submit answer",
@@ -171,7 +171,10 @@ export default function ViewPost() {
               {!loading && user && (
                 <Popover open={popoverOpen}>
                   <PopoverTrigger className="w-full text-start">
-                    <div onClick={() => setPopoverOpen(true)} className="relative border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none pb-14">
+                    <div
+                      onClick={() => setPopoverOpen(true)}
+                      className="relative border-gray-200 dark:border-gray-800 mx-8 mt-7 pb-1 list-none pb-14"
+                    >
                       <li className="mb-5 ms-8">
                         <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
                           <Avatar className="border-2 border-gray-300 dark:border-gray-700">
@@ -193,14 +196,17 @@ export default function ViewPost() {
                     </div>
                   </PopoverTrigger>
                   <PopoverContent>
-                  <div className="flex flex-row justify-between">
-                 <h1 className="text-gray-700 text-lg font-medium dark:text-white">
-                      Answer {data && data.user.username} post
-                    </h1>
-                    <button className="bg-transparent border-none text-xl" onClick={() => setPopoverOpen(false)}>
-                    <Icon icon="ic:round-close" />
-                    </button>
-                 </div>
+                    <div className="flex flex-row justify-between">
+                      <h1 className="text-gray-700 text-lg font-medium dark:text-white">
+                        Answer {data && data.user.username} post
+                      </h1>
+                      <button
+                        className="bg-transparent border-none text-xl"
+                        onClick={() => setPopoverOpen(false)}
+                      >
+                        <Icon icon="ic:round-close" />
+                      </button>
+                    </div>
                     <Textarea
                       value={typedAnswer}
                       onChange={(e) => setTypedAnwser(e.target.value)}

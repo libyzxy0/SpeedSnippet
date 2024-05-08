@@ -42,7 +42,8 @@ export function ThemeProvider({
         : "light";
 
       root.classList.add(systemTheme);
-      document.body.style.background = systemTheme == "dark" ? "#030712" : "#ffffff";
+      document.body.style.background =
+        systemTheme == "dark" ? "#030712" : "#ffffff";
       return;
     }
     //Set the background color of the body
