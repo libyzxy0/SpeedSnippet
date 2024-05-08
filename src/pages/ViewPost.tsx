@@ -89,8 +89,8 @@ export default function ViewPost() {
       setCode("");
       setLang("");
       setPopoverOpen(false);
-      postID && getAnswer(postID);
-      postID && getSinglePost(postID);
+      postID && getAnswer(parseInt(postID));
+      postID && getSinglePost(parseInt(postID));
     } else {
       toast({
         title: "Failed to submit answer",

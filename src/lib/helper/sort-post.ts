@@ -32,7 +32,7 @@ export function sortPost(posts: Post[]): Post[] {
   const olderPosts: Post[] = [];
 
   posts.forEach((post: Post) => {
-    const postTimestamp: any = post.created_at
+    const postTimestamp: number = post.created_at
       ? new Date(post.created_at).getTime()
       : Date.now();
     if (postTimestamp >= twentyFourHoursAgo) {
